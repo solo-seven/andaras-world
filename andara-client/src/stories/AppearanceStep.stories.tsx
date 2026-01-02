@@ -3,6 +3,8 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { AppearanceStep } from '../components/character-creation/AppearanceStep';
 import characterCreationReducer from '../store/slices/characterCreationSlice';
+import type { CharacterCreationStep } from '../store/slices/characterCreationSlice';
+import { Origin } from '../types/character';
 import gameReducer from '../store/slices/gameSlice';
 import partyReducer from '../store/slices/partySlice';
 import worldReducer from '../store/slices/worldSlice';
@@ -21,10 +23,10 @@ const mockStore = configureStore({
   },
   preloadedState: {
     characterCreation: {
-      currentStep: 'appearance',
+      currentStep: 'appearance' as CharacterCreationStep,
       formData: {
         name: '',
-        origin: 'VAULT_DWELLER',
+        origin: Origin.VAULT_DWELLER,
         attributes: {
           strength: 10,
           agility: 9,

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
-  setStep,
   setOrigins,
   setSkills,
   reset,
@@ -27,7 +26,7 @@ const STEPS: { id: CharacterCreationStep; label: string }[] = [
 
 export const CharacterCreationWizard: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { currentStep, availableOrigins, availableSkills } = useAppSelector(
+  const { currentStep } = useAppSelector(
     (state) => state.characterCreation
   );
 

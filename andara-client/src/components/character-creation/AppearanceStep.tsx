@@ -4,7 +4,8 @@ import {
   setStep,
   updateFormData,
 } from '../../store/slices/characterCreationSlice';
-import type { Appearance, Gender, BodyType } from '../../types/character';
+import type { Appearance } from '../../types/character';
+import { Gender, BodyType } from '../../types/character';
 
 export const AppearanceStep: React.FC = () => {
   const dispatch = useAppDispatch();

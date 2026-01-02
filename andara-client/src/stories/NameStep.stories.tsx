@@ -3,6 +3,8 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { NameStep } from '../components/character-creation/NameStep';
 import characterCreationReducer from '../store/slices/characterCreationSlice';
+import type { CharacterCreationStep } from '../store/slices/characterCreationSlice';
+import { Origin, Gender, BodyType } from '../types/character';
 import gameReducer from '../store/slices/gameSlice';
 import partyReducer from '../store/slices/partySlice';
 import worldReducer from '../store/slices/worldSlice';
@@ -20,10 +22,10 @@ const mockStore = configureStore({
   },
   preloadedState: {
     characterCreation: {
-      currentStep: 'name',
+      currentStep: 'name' as CharacterCreationStep,
       formData: {
         name: '',
-        origin: 'VAULT_DWELLER',
+        origin: Origin.VAULT_DWELLER,
         attributes: {
           strength: 10,
           agility: 9,
@@ -34,8 +36,8 @@ const mockStore = configureStore({
         },
         skillFocuses: ['mechanics', 'electronics'],
         appearance: {
-          gender: 'NON_BINARY' as const,
-          bodyType: 'AVERAGE' as const,
+          gender: Gender.NON_BINARY,
+          bodyType: BodyType.AVERAGE,
         },
         isProtagonist: true,
       },
@@ -79,10 +81,10 @@ export const WithName: Story = {
         },
         preloadedState: {
           characterCreation: {
-            currentStep: 'name',
+            currentStep: 'name' as CharacterCreationStep,
             formData: {
               name: 'Test Character',
-              origin: 'VAULT_DWELLER',
+              origin: Origin.VAULT_DWELLER,
               attributes: {
                 strength: 10,
                 agility: 9,
@@ -93,8 +95,8 @@ export const WithName: Story = {
               },
               skillFocuses: ['mechanics', 'electronics'],
               appearance: {
-                gender: 'NON_BINARY' as const,
-                bodyType: 'AVERAGE' as const,
+                gender: Gender.NON_BINARY,
+                bodyType: BodyType.AVERAGE,
               },
               isProtagonist: true,
             },
