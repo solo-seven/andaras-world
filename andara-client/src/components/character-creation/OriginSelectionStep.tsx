@@ -5,7 +5,7 @@ import {
   updateFormData,
   setValidationErrors,
 } from '../../store/slices/characterCreationSlice';
-import type { Origin } from '../../types/character';
+import { Origin } from '../../types/character';
 
 export const OriginSelectionStep: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -13,8 +13,19 @@ export const OriginSelectionStep: React.FC = () => {
     (state) => state.characterCreation
   );
 
-  const handleSelectOrigin = (origin: Origin) => {
-    dispatch(updateFormData({ origin }));
+  const handleSelectOrigin = (originId: string) => {
+    // Validate that the origin ID is a valid Origin enum value
+    const validOrigins = Object.values(Origin) as string[];
+    if (!validOrigins.includes(originId)) {
+      dispatch(
+        setValidationErrors({
+          origin: `Invalid origin: ${originId}. Please select a valid origin.`,
+        })
+      );
+      return;
+    }
+    // Safe to cast after validation
+    dispatch(updateFormData({ origin: originId as Origin }));
     dispatch(setValidationErrors({}));
   };
 
@@ -42,7 +53,7 @@ export const OriginSelectionStep: React.FC = () => {
             className={`origin-card ${
               formData.origin === origin.id ? 'selected' : ''
             }`}
-            onClick={() => handleSelectOrigin(origin.id as Origin)}
+            onClick={() => handleSelectOrigin(origin.id)}
           >
             <h3>{origin.displayName}</h3>
             <p>{origin.description}</p>
