@@ -25,13 +25,31 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: 'gradle'
+      
+      - name: Setup Gradle wrapper JAR
+        run: |
+          if [ ! -f andara-server/gradle/wrapper/gradle-wrapper.jar ]; then
+            echo "Gradle wrapper JAR missing, downloading..."
+            mkdir -p andara-server/gradle/wrapper
+            # Download wrapper JAR from Gradle's GitHub releases
+            curl -L -f -o andara-server/gradle/wrapper/gradle-wrapper.jar \
+              https://github.com/gradle/gradle/raw/v8.5.0/gradle/wrapper/gradle-wrapper.jar || {
+              echo "Failed to download from GitHub, trying alternative method..."
+              # Alternative: use gradlew script itself (it can download the JAR)
+              cd andara-server
+              chmod +x gradlew
+              # The gradlew script will download the wrapper JAR on first run
+              ./gradlew --version || true
+              cd ..
+            }
+          fi
+        working-directory: .
       
       - name: Grant execute permission for gradlew
         run: chmod +x andara-server/gradlew
         working-directory: .
       
       - name: Build and test with Gradle
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
         working-directory: andara-server
 
