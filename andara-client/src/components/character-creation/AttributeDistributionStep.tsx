@@ -124,7 +124,7 @@ export const AttributeDistributionStep: React.FC = () => {
               <button
                 onClick={() => updateAttribute(attr, 1)}
                 disabled={
-                  attributes[attr] >= MAX_ATTRIBUTE || pointsRemaining < 0
+                  attributes[attr] >= MAX_ATTRIBUTE || pointsRemaining <= 0
                 }
               >
                 +
