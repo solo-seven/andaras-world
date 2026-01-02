@@ -13,8 +13,6 @@ public final class Attributes implements ValueObject {
     private static final int MAX_ATTRIBUTE = 16;
     private static final int BASE_ATTRIBUTE = 8;
     private static final int POINTS_TO_DISTRIBUTE = 27;
-    private static final int BASE_TOTAL = BASE_ATTRIBUTE * 6; // 48
-    private static final int MAX_TOTAL = BASE_TOTAL + POINTS_TO_DISTRIBUTE; // 75
 
     private final int strength;
     private final int agility;
@@ -32,15 +30,33 @@ public final class Attributes implements ValueObject {
         validateAttribute(charisma, "Charisma");
 
         int total = strength + agility + endurance + intellect + perception + charisma;
-        // Point-buy: start with 8 in each (48), distribute 27 points
-        // But you can reduce below 8 to get more points elsewhere
-        // So total should be between 36 (all 6s) and 75 (all 8s + 27 distributed)
-        // Actually, max could be higher if you reduce some below 8
-        // For simplicity, validate that total is reasonable
-        if (total < MIN_ATTRIBUTE * 6 || total > MAX_TOTAL) {
+        
+        // Point-buy validation: calculate points used from base (8 each)
+        // Points used = sum of (attr - BASE_ATTRIBUTE) for all attributes
+        // This can be negative if attributes are reduced below 8 (points recovered)
+        int pointsUsed = (strength - BASE_ATTRIBUTE) +
+                        (agility - BASE_ATTRIBUTE) +
+                        (endurance - BASE_ATTRIBUTE) +
+                        (intellect - BASE_ATTRIBUTE) +
+                        (perception - BASE_ATTRIBUTE) +
+                        (charisma - BASE_ATTRIBUTE);
+        
+        // Validate: points used cannot exceed available points to distribute
+        // Can be negative (attributes reduced below base), allowing more points for other attributes
+        if (pointsUsed > POINTS_TO_DISTRIBUTE) {
+            throw new IllegalArgumentException(
+                String.format("Attribute distribution uses %d points, but only %d are available",
+                    pointsUsed, POINTS_TO_DISTRIBUTE)
+            );
+        }
+        
+        // Also validate total is within absolute bounds (all 6s to all 16s)
+        int minTotal = MIN_ATTRIBUTE * 6; // 36
+        int maxTotal = MAX_ATTRIBUTE * 6; // 96
+        if (total < minTotal || total > maxTotal) {
             throw new IllegalArgumentException(
                 String.format("Total attribute points must be between %d and %d, but got %d",
-                    MIN_ATTRIBUTE * 6, MAX_TOTAL, total)
+                    minTotal, maxTotal, total)
             );
         }
 

@@ -32,10 +32,13 @@ export const AttributeDistributionStep: React.FC = () => {
   const [pointsRemaining, setPointsRemaining] = useState(POINTS_TO_DISTRIBUTE);
 
   useEffect(() => {
-    const total = Object.values(attributes).reduce((sum, val) => sum + val, 0);
-    const baseTotal = BASE_ATTRIBUTE * 6;
-    const used = total - baseTotal;
-    setPointsRemaining(POINTS_TO_DISTRIBUTE - used);
+    // Point-buy calculation: sum of (attr - BASE_ATTRIBUTE) for all attributes
+    // This can be negative if attributes are reduced below 8 (gives points back)
+    const pointsUsed = Object.values(attributes).reduce(
+      (sum, val) => sum + (val - BASE_ATTRIBUTE),
+      0
+    );
+    setPointsRemaining(POINTS_TO_DISTRIBUTE - pointsUsed);
   }, [attributes]);
 
   const updateAttribute = (
@@ -51,14 +54,22 @@ export const AttributeDistributionStep: React.FC = () => {
   };
 
   const handleNext = () => {
-    const total = Object.values(attributes).reduce((sum, val) => sum + val, 0);
-    const baseTotal = BASE_ATTRIBUTE * 6;
-    const used = total - baseTotal;
+    // Point-buy calculation: sum of (attr - BASE_ATTRIBUTE) for all attributes
+    // Negative values mean attributes were reduced below 8 (points recovered)
+    // Positive values mean attributes were increased above 8 (points spent)
+    const pointsUsed = Object.values(attributes).reduce(
+      (sum, val) => sum + (val - BASE_ATTRIBUTE),
+      0
+    );
 
-    if (used < 0 || used > POINTS_TO_DISTRIBUTE) {
+    // Validate: points used cannot exceed available points to distribute
+    // Can be negative (attributes reduced below base), but capped at reasonable limit
+    // Minimum: all 6s = -12 points (6*6 - 8*6), Maximum: all 16s = +48 points (16*6 - 8*6)
+    // But we only have 27 points to distribute, so max is +27
+    if (pointsUsed > POINTS_TO_DISTRIBUTE) {
       dispatch(
         setValidationErrors({
-          attributes: 'Invalid attribute distribution',
+          attributes: `You have used ${pointsUsed} points, but only ${POINTS_TO_DISTRIBUTE} are available`,
         })
       );
       return;
@@ -87,6 +98,11 @@ export const AttributeDistributionStep: React.FC = () => {
 
       <div className="points-remaining">
         Points Remaining: <strong>{pointsRemaining}</strong>
+        {pointsRemaining < 0 && (
+          <span className="points-warning">
+            {' '}(You have {Math.abs(pointsRemaining)} extra points from reducing attributes below 8)
+          </span>
+        )}
       </div>
 
       {validationErrors.attributes && (
