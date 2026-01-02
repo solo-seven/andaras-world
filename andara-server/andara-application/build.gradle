@@ -3,5 +3,8 @@ dependencies {
     implementation project(':andara-common')
     
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
 }
 

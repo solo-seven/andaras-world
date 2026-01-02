@@ -1,10 +1,12 @@
 dependencies {
     implementation project(':andara-domain')
+    implementation project(':andara-application')
     implementation project(':andara-common')
     
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.postgresql:postgresql'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 }
 
