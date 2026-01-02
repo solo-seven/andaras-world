@@ -30,7 +30,7 @@ test-frontend:
 			echo "Installing dependencies..."; \
 			npm install; \
 		fi && \
-		npx vitest --run
+		npm test -- --run
 	@echo "✓ Frontend tests passed"
 
 # Build targets
