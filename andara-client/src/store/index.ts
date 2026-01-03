@@ -4,6 +4,7 @@ import partyReducer from './slices/partySlice';
 import worldReducer from './slices/worldSlice';
 import combatReducer from './slices/combatSlice';
 import uiReducer from './slices/uiSlice';
+import characterCreationReducer from './slices/characterCreationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     world: worldReducer,
     combat: combatReducer,
     ui: uiReducer,
+    characterCreation: characterCreationReducer,
   },
 });
 

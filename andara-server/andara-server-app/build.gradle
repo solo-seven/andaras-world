@@ -17,6 +17,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-database-postgresql'
     
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.kafka:spring-kafka'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testRuntimeOnly 'com.h2database:h2'
 }
