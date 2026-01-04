@@ -35,10 +35,12 @@ public record CharacterCreated(
         Appearance appearance,
         boolean isProtagonist,
         UUID instanceId,
+        UUID partyId,
         UUID agentId
     ) {
         Map<String, Object> payload = new HashMap<>();
         payload.put("characterId", characterId.toString());
+        payload.put("partyId", partyId.toString());
         payload.put("name", name.getValue());
         payload.put("origin", origin.name());
         payload.put("strength", attributes.strength());

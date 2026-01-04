@@ -21,11 +21,12 @@ class CharacterTest {
         List<SkillId> skillFocuses = List.of(SkillId.of("mechanics"), SkillId.of("electronics"));
         Appearance appearance = Appearance.defaultAppearance();
         UUID instanceId = UUID.randomUUID();
+        UUID partyId = UUID.randomUUID();
         UUID agentId = UUID.randomUUID();
 
         Character character = Character.create(
             characterId, name, origin, attributes, skillFocuses, appearance, true,
-            instanceId, agentId
+            instanceId, partyId, agentId
         );
 
         List<DomainEvent> events = character.getUncommittedEvents();
@@ -44,11 +45,12 @@ class CharacterTest {
         List<SkillId> skillFocuses = List.of(focus1, focus2);
         Appearance appearance = Appearance.defaultAppearance();
         UUID instanceId = UUID.randomUUID();
+        UUID partyId = UUID.randomUUID();
         UUID agentId = UUID.randomUUID();
 
         Character character = Character.create(
             characterId, name, origin, attributes, skillFocuses, appearance, true,
-            instanceId, agentId
+            instanceId, partyId, agentId
         );
 
         assertEquals(20, character.getSkills().get(focus1).getLevel());
@@ -64,11 +66,12 @@ class CharacterTest {
         List<SkillId> skillFocuses = List.of(SkillId.of("mechanics"), SkillId.of("electronics"));
         Appearance appearance = Appearance.defaultAppearance();
         UUID instanceId = UUID.randomUUID();
+        UUID partyId = UUID.randomUUID();
         UUID agentId = UUID.randomUUID();
 
         Character character = Character.create(
             characterId, name, origin, attributes, skillFocuses, appearance, true,
-            instanceId, agentId
+            instanceId, partyId, agentId
         );
 
         // Vault Dweller should have mechanics and electronics at 15 (from origin bonus)
@@ -98,11 +101,12 @@ class CharacterTest {
         );
         Appearance appearance = Appearance.create(Appearance.Gender.MALE, Appearance.BodyType.STOCKY);
         UUID instanceId = UUID.randomUUID();
+        UUID partyId = UUID.randomUUID();
         UUID agentId = UUID.randomUUID();
 
         CharacterCreated event = CharacterCreated.create(
             characterId, name, origin, attributes, startingSkills, appearance, true,
-            instanceId, agentId
+            instanceId, partyId, agentId
         );
 
         Character character = Character.fromEvents(List.of(event));

@@ -1,6 +1,8 @@
 package com.andara.application.party;
 
 import com.andara.common.Result;
+import com.andara.infrastructure.CharacterRepository;
+import com.andara.infrastructure.EventPublisher;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.party.Character;
 import com.andara.domain.party.CharacterId;
@@ -50,6 +52,7 @@ public class CreateCharacterCommandHandler {
                 command.appearance(),
                 command.isProtagonist(),
                 command.instanceId(),
+                command.partyId(),
                 command.agentId()
             );
 

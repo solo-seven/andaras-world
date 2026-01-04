@@ -35,6 +35,9 @@ public record CreateCharacterRequestDto(
     @NotNull(message = "Instance ID is required")
     UUID instanceId,
 
+    @NotNull(message = "Party ID is required")
+    UUID partyId,
+
     @NotNull(message = "Agent ID is required")
     UUID agentId
 ) {

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface GameState {
   instanceId: string | null;
+  partyId: string | null;
   sessionId: string | null;
   status: 'menu' | 'loading' | 'playing' | 'paused' | 'combat';
   worldTime: number;
@@ -9,6 +10,7 @@ interface GameState {
 
 const initialState: GameState = {
   instanceId: null,
+  partyId: null,
   sessionId: null,
   status: 'menu',
   worldTime: 0,
@@ -21,6 +23,9 @@ const gameSlice = createSlice({
     setInstanceId: (state, action: PayloadAction<string>) => {
       state.instanceId = action.payload;
     },
+    setPartyId: (state, action: PayloadAction<string>) => {
+      state.partyId = action.payload;
+    },
     setSessionId: (state, action: PayloadAction<string>) => {
       state.sessionId = action.payload;
     },
@@ -30,10 +35,27 @@ const gameSlice = createSlice({
     setWorldTime: (state, action: PayloadAction<number>) => {
       state.worldTime = action.payload;
     },
+    setGameIds: (
+      state,
+      action: PayloadAction<{
+        instanceId: string;
+        partyId: string;
+      }>
+    ) => {
+      state.instanceId = action.payload.instanceId;
+      state.partyId = action.payload.partyId;
+    },
   },
 });
 
-export const { setInstanceId, setSessionId, setStatus, setWorldTime } = gameSlice.actions;
+export const {
+  setInstanceId,
+  setPartyId,
+  setSessionId,
+  setStatus,
+  setWorldTime,
+  setGameIds,
+} = gameSlice.actions;
 export default gameSlice.reducer;
 
 

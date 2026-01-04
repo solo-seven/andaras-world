@@ -1,6 +1,6 @@
 package com.andara.infrastructure.party;
 
-import com.andara.application.party.CharacterRepository;
+import com.andara.infrastructure.CharacterRepository;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.party.Character;
 import com.andara.domain.party.CharacterId;

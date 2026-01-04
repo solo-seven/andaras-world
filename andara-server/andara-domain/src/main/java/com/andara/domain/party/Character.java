@@ -38,6 +38,7 @@ public class Character extends AggregateRoot {
         Appearance appearance,
         boolean isProtagonist,
         UUID instanceId,
+        UUID partyId,
         UUID agentId
     ) {
         Character character = new Character();
@@ -72,6 +73,7 @@ public class Character extends AggregateRoot {
             appearance,
             isProtagonist,
             instanceId,
+            partyId,
             agentId
         );
 

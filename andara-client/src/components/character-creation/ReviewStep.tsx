@@ -1,139 +1,119 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import {
-  setStep,
-  setSubmitting,
-  setCreatedCharacterId,
-} from '../../store/slices/characterCreationSlice';
-import { createCharacter } from '../../api/characterApi';
+import { setStep } from '../../store/slices/characterCreationSlice';
 import { useNavigate } from 'react-router-dom';
+import { CharacterSummary } from '../ui/CharacterSummary';
+import { Button } from '../ui/Button';
+import { Stepper, StepperStep } from '../ui/Stepper';
+import { ErrorBanner } from '../ui/ErrorBanner';
+import { startNewGameAsync, setValidationErrors, reset } from '../../store/slices/characterCreationSlice';
 
 export const ReviewStep: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { formData, isSubmitting } = useAppSelector(
-    (state) => state.characterCreation
-  );
+  const { formData, isSubmitting, validationErrors, createdCharacterId } =
+    useAppSelector((state) => state.characterCreation);
+  const hasNavigatedRef = useRef(false);
 
-  const handleSubmit = async () => {
-    if (!formData.name || !formData.origin || !formData.attributes || 
-        formData.skillFocuses.length !== 2 || !formData.appearance) {
+  // Navigate to character sheet when character is created
+  // Pass characterId in URL to avoid dependency on Redux state after unmount
+  // Note: State reset is handled by CharacterCreationWizard on mount if needed
+  useEffect(() => {
+    if (createdCharacterId && !hasNavigatedRef.current) {
+      const characterId = createdCharacterId;
+      hasNavigatedRef.current = true;
+      navigate(`/character-sheet/${characterId}`);
+      
+      // Reset state immediately before navigation to clean up
+      // This happens before the component unmounts, ensuring the reset executes
+      // The navigation will proceed, and CharacterSheet reads from URL params
+      dispatch(reset());
+    }
+  }, [createdCharacterId, navigate, dispatch]);
+
+  const handleSubmit = () => {
+    if (
+      !formData.name ||
+      !formData.origin ||
+      !formData.attributes ||
+      formData.skillFocuses.length !== 2 ||
+      !formData.appearance
+    ) {
       return;
     }
 
-    dispatch(setSubmitting(true));
-
-    try {
-      // For prototype, use placeholder UUIDs
-      const instanceId = crypto.randomUUID();
-      const agentId = crypto.randomUUID();
-
-      const response = await createCharacter({
-        name: formData.name,
-        origin: formData.origin,
-        attributes: formData.attributes,
-        skillFocuses: formData.skillFocuses,
-        appearance: formData.appearance,
-        isProtagonist: formData.isProtagonist,
-        instanceId,
-        agentId,
-      });
-
-      dispatch(setCreatedCharacterId(response.characterId));
-      // Navigate to game or character sheet
-      navigate('/game');
-    } catch (error) {
-      console.error('Failed to create character:', error);
-      alert('Failed to create character. Please try again.');
-    } finally {
-      dispatch(setSubmitting(false));
-    }
+    dispatch(startNewGameAsync());
   };
 
-  const getOriginName = (originId: string) => {
-    const origins: Record<string, string> = {
-      VAULT_DWELLER: 'Vault Dweller',
-      WASTELANDER: 'Wastelander',
-      RIFT_TOUCHED: 'Rift-Touched',
-    };
-    return origins[originId] || originId;
-  };
+  const CHARACTER_CREATION_STEPS: StepperStep[] = [
+    { id: 'origin', label: 'Origin' },
+    { id: 'attributes', label: 'Attributes' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'appearance', label: 'Appearance' },
+    { id: 'name', label: 'Identity' },
+  ];
+
+  const { currentStep, availableOrigins, availableSkills } =
+    useAppSelector((state) => state.characterCreation);
+
+  // Map current step to stepper step (review step maps to name step for display)
+  const stepperStep = currentStep === 'review' ? 'name' : currentStep;
 
   return (
     <div className="review-step">
-      <h2>Review Your Character</h2>
-      <p>Review your character details before creation.</p>
+      <header className="review-step__header">
+        <div className="review-step__logo">ANDARA&apos;S WORLD</div>
+        <Stepper steps={CHARACTER_CREATION_STEPS} currentStep={stepperStep} />
+      </header>
 
-      <div className="review-section">
-        <h3>Basic Information</h3>
-        <p>
-          <strong>Name:</strong> {formData.name}
+      <main className="review-step__main">
+        <h1 className="review-step__title">Review Your Character</h1>
+        <p className="review-step__subtitle">
+          Review your character details before creation. Once created, you cannot
+          change these details.
         </p>
-        <p>
-          <strong>Origin:</strong> {formData.origin && getOriginName(formData.origin)}
-        </p>
-      </div>
 
-      {formData.attributes && (
-        <div className="review-section">
-          <h3>Attributes</h3>
-          <div className="attributes-grid">
-            <div>Strength: {formData.attributes.strength}</div>
-            <div>Agility: {formData.attributes.agility}</div>
-            <div>Endurance: {formData.attributes.endurance}</div>
-            <div>Intellect: {formData.attributes.intellect}</div>
-            <div>Perception: {formData.attributes.perception}</div>
-            <div>Charisma: {formData.attributes.charisma}</div>
-          </div>
-        </div>
-      )}
+        <CharacterSummary
+          name={formData.name}
+          origin={formData.origin}
+          attributes={formData.attributes}
+          skills={formData.skillFocuses}
+          appearance={formData.appearance}
+          availableOrigins={availableOrigins}
+          availableSkills={availableSkills}
+        />
 
-      {formData.skillFocuses.length > 0 && (
-        <div className="review-section">
-          <h3>Focus Skills</h3>
-          <ul>
-            {formData.skillFocuses.map((skillId) => (
-              <li key={skillId}>{skillId}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {validationErrors.submit && (
+          <ErrorBanner
+            message={validationErrors.submit}
+            onDismiss={() => dispatch(setValidationErrors({}))}
+          />
+        )}
+      </main>
 
-      {formData.appearance && (
-        <div className="review-section">
-          <h3>Appearance</h3>
-          <p>
-            <strong>Body Type:</strong> {formData.appearance.bodyType.replace('_', '-')}
-          </p>
-          <p>
-            <strong>Hair Style:</strong> {formData.appearance.hairStyle.replace('_', '-')}
-          </p>
-          <p>
-            <strong>Hair Color:</strong> {formData.appearance.hairColor}
-          </p>
-          <p>
-            <strong>Skin Tone:</strong> {formData.appearance.skinTone}
-          </p>
-          <p>
-            <strong>Eye Color:</strong> {formData.appearance.eyeColor}
-          </p>
-          <p>
-            <strong>Age Appearance:</strong> {formData.appearance.ageAppearance}
-          </p>
-          <p>
-            <strong>Scars & Marks:</strong> {formData.appearance.scarsMarks.replace('_', '-')}
-          </p>
-        </div>
-      )}
-
-      <div className="step-actions">
-        <button onClick={() => dispatch(setStep('name'))} disabled={isSubmitting}>
-          Back
-        </button>
-        <button onClick={handleSubmit} disabled={isSubmitting}>
-          {isSubmitting ? 'Creating...' : 'Create Character'}
-        </button>
-      </div>
+      <footer className="review-step__actions">
+        <Button
+          variant="secondary"
+          onClick={() => dispatch(setStep('name'))}
+          disabled={isSubmitting}
+        >
+          ← Back
+        </Button>
+        <Button
+          variant="primary"
+          onClick={handleSubmit}
+          disabled={
+            isSubmitting ||
+            !formData.name ||
+            !formData.origin ||
+            !formData.attributes ||
+            formData.skillFocuses.length !== 2 ||
+            !formData.appearance
+          }
+        >
+          {isSubmitting ? 'Creating Character...' : 'Create Character'}
+        </Button>
+      </footer>
     </div>
   );
 };

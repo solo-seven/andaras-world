@@ -1,8 +1,11 @@
 dependencies {
     implementation project(':andara-domain')
     implementation project(':andara-common')
+    implementation project(':andara-infrastructure')
     
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     
     testImplementation 'org.mockito:mockito-core'
     testImplementation 'org.mockito:mockito-junit-jupiter'

@@ -1,0 +1,26 @@
+@import '../ui/ui-components.css';
+
+.character-creation-wizard {
+  min-height: 100vh;
+  background-color: var(--color-void);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.character-creation-wizard__header {
+  margin-bottom: var(--space-xl);
+}
+
+.wizard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.character-creation-wizard__cancel {
+  position: fixed;
+  top: var(--space-l);
+  right: var(--space-l);
+  z-index: 100;
+}

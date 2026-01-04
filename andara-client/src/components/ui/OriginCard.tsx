@@ -41,6 +41,14 @@ export const OriginCard: React.FC<OriginCardProps> = ({
       aria-pressed={selected}
       aria-label={`Select ${origin.displayName} origin`}
     >
+      {selected && (
+        <>
+          <div className="corner-bracket corner-bracket--top-left" />
+          <div className="corner-bracket corner-bracket--top-right" />
+          <div className="corner-bracket corner-bracket--bottom-left" />
+          <div className="corner-bracket corner-bracket--bottom-right" />
+        </>
+      )}
       <div
         className="andara-origin-card__image"
         data-origin={origin.id.toLowerCase().replace(/_/g, '-')}

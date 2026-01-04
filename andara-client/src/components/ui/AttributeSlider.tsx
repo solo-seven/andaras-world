@@ -28,9 +28,9 @@ export const AttributeSlider: React.FC<AttributeSliderProps> = ({
   // Calculate fill percentage for the track
   const fillPercent = ((value - min) / (max - min)) * 100;
 
-  // Generate notch values
+  // Generate notch values - one for each integer
   const notches = [];
-  for (let i = min; i <= max; i += 2) {
+  for (let i = min; i <= max; i++) {
     notches.push(i);
   }
 
@@ -43,8 +43,10 @@ export const AttributeSlider: React.FC<AttributeSliderProps> = ({
         </div>
         <div className="andara-attribute-slider__value">{value}</div>
       </div>
-      <div className="andara-attribute-slider__description">{description}</div>
-      <div className="andara-attribute-slider__container">
+      <div className="andara-attribute-slider__description" title={description}>
+        {description}
+      </div>
+      <div className="andara-attribute-slider__container" title={description}>
         <div
           className="andara-attribute-slider__track"
           style={{ width: `${fillPercent}%` }}

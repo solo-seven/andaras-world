@@ -1,4 +1,4 @@
-package com.andara.application.party;
+package com.andara.infrastructure;
 
 import com.andara.domain.party.Character;
 import com.andara.domain.party.CharacterId;

@@ -56,3 +56,16 @@ export async function getSkills(): Promise<Skill[]> {
   return response.data;
 }
 
+/**
+ * Get character by ID.
+ */
+export async function getCharacterById(characterId: string): Promise<any> {
+  const response = await axios.get<{ success: boolean; character: any }>(
+    `${API_BASE_URL}/characters/${characterId}`
+  );
+  if (!response.data.success) {
+    throw new Error('Failed to fetch character');
+  }
+  return response.data.character;
+}
+

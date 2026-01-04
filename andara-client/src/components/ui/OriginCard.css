@@ -3,7 +3,8 @@
 .andara-origin-card {
   background: var(--color-concrete);
   border: 1px solid var(--color-rust);
-  height: 420px;
+  width: 280px;
+  height: 360px;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
@@ -50,28 +51,45 @@
     inset 0 0 40px rgba(77, 166, 255, 0.05);
 }
 
-.andara-origin-card--selected::after {
-  content: '';
+/* Corner brackets for selected state */
+.corner-bracket {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 12px;
-  height: 2px;
-  background: var(--color-rift-stable);
-  box-shadow: 0 0 8px var(--color-rift-stable);
-  z-index: 1;
+  height: 12px;
+  z-index: 2;
+  pointer-events: none;
 }
 
-.andara-origin-card--selected::before {
-  content: '';
-  position: absolute;
+.corner-bracket--top-left {
   top: 0;
   left: 0;
-  width: 2px;
-  height: 12px;
-  background: var(--color-rift-stable);
+  border-top: 2px solid var(--color-rift-stable);
+  border-left: 2px solid var(--color-rift-stable);
   box-shadow: 0 0 8px var(--color-rift-stable);
-  z-index: 1;
+}
+
+.corner-bracket--top-right {
+  top: 0;
+  right: 0;
+  border-top: 2px solid var(--color-rift-stable);
+  border-right: 2px solid var(--color-rift-stable);
+  box-shadow: 0 0 8px var(--color-rift-stable);
+}
+
+.corner-bracket--bottom-left {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid var(--color-rift-stable);
+  border-left: 2px solid var(--color-rift-stable);
+  box-shadow: 0 0 8px var(--color-rift-stable);
+}
+
+.corner-bracket--bottom-right {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid var(--color-rift-stable);
+  border-right: 2px solid var(--color-rift-stable);
+  box-shadow: 0 0 8px var(--color-rift-stable);
 }
 
 .andara-origin-card__image {

@@ -18,6 +18,7 @@ public record CreateCharacterCommand(
     Appearance appearance,
     boolean isProtagonist,
     UUID instanceId,
+    UUID partyId,
     UUID agentId
 ) {
     public CreateCharacterCommand {
@@ -38,6 +39,9 @@ public record CreateCharacterCommand(
         }
         if (instanceId == null) {
             throw new IllegalArgumentException("Instance ID cannot be null");
+        }
+        if (partyId == null) {
+            throw new IllegalArgumentException("Party ID cannot be null");
         }
         if (agentId == null) {
             throw new IllegalArgumentException("Agent ID cannot be null");

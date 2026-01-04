@@ -19,6 +19,13 @@
   --color-rift-healing: #4dffb8;
   --color-rift-temporal: #ffdb4d;
   
+  /* Skill Category Colors */
+  --color-combat: #ff6b6b;
+  --color-survival: #4dffb8;
+  --color-technical: #4da6ff;
+  --color-arcane: #d946ff;
+  --color-social: #ffdb4d;
+  
   /* Spacing */
   --space-xs: 4px;
   --space-s: 8px;

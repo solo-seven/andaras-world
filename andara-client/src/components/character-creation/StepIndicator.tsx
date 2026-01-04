@@ -1,4 +1,5 @@
 import React from 'react';
+import { Stepper } from '../ui/Stepper';
 import type { CharacterCreationStep } from '../../store/slices/characterCreationSlice';
 
 interface StepIndicatorProps {
@@ -10,22 +11,17 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
   steps,
 }) => {
-  const currentIndex = steps.findIndex((step) => step.id === currentStep);
+  // Filter out 'review' step as it's not shown in the stepper (maps to 'name' for display)
+  // Only show the main creation steps: Origin → Attributes → Skills → Appearance → Name
+  const stepperSteps = steps.filter((step) => step.id !== 'review');
+  
+  // Map current step to stepper step (review step maps to name step for display)
+  const stepperStep =
+    currentStep === 'review' ? 'name' : currentStep;
 
   return (
     <div className="step-indicator">
-      {steps.map((step, index) => (
-        <div
-          key={step.id}
-          className={`step ${index === currentIndex ? 'active' : ''} ${
-            index < currentIndex ? 'completed' : ''
-          }`}
-        >
-          <div className="step-number">{index + 1}</div>
-          <div className="step-label">{step.label}</div>
-        </div>
-      ))}
+      <Stepper steps={stepperSteps} currentStep={stepperStep} />
     </div>
   );
 };
-

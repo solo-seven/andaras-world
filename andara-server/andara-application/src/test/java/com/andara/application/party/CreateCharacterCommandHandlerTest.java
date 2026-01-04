@@ -1,6 +1,8 @@
 package com.andara.application.party;
 
 import com.andara.common.Result;
+import com.andara.infrastructure.CharacterRepository;
+import com.andara.infrastructure.EventPublisher;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.party.Character;
 import com.andara.domain.party.Origin;
@@ -45,6 +47,7 @@ class CreateCharacterCommandHandlerTest {
             Appearance.defaultAppearance(),
             true,
             UUID.randomUUID(),
+            UUID.randomUUID(),
             UUID.randomUUID()
         );
 
@@ -67,6 +70,7 @@ class CreateCharacterCommandHandlerTest {
                 Appearance.defaultAppearance(),
                 true,
                 UUID.randomUUID(),
+                UUID.randomUUID(),
                 UUID.randomUUID()
             );
         });
@@ -84,6 +88,7 @@ class CreateCharacterCommandHandlerTest {
                 Appearance.defaultAppearance(),
                 true,
                 UUID.randomUUID(),
+                UUID.randomUUID(),
                 UUID.randomUUID()
             );
         });
@@ -99,6 +104,7 @@ class CreateCharacterCommandHandlerTest {
             List.of("mechanics", "electronics"),
             Appearance.defaultAppearance(),
             true,
+            UUID.randomUUID(),
             UUID.randomUUID(),
             UUID.randomUUID()
         );

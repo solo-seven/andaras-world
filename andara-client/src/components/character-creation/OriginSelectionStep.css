@@ -60,9 +60,16 @@
 
 .andara-origin-selection-step__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 280px);
   gap: var(--space-l);
   margin-bottom: var(--space-xxl);
+  justify-content: center;
+}
+
+@media (max-width: 960px) {
+  .andara-origin-selection-step__grid {
+    grid-template-columns: repeat(2, 280px);
+  }
 }
 
 .andara-origin-selection-step__actions {

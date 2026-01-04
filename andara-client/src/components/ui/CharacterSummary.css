@@ -1,0 +1,105 @@
+@import './ui-components.css';
+
+.character-summary {
+  background: var(--color-concrete);
+  border: 1px solid var(--color-rust);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.character-summary__section {
+  border-bottom: 1px solid var(--color-rust);
+  padding-bottom: var(--space-l);
+}
+
+.character-summary__section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.character-summary__section-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-rift-stable);
+  margin-bottom: var(--space-m);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.character-summary__field {
+  display: flex;
+  gap: var(--space-m);
+  margin-bottom: var(--space-s);
+  font-family: var(--font-primary);
+  font-size: 14px;
+}
+
+.character-summary__field-label {
+  color: var(--color-smoke);
+  min-width: 120px;
+  font-weight: 500;
+}
+
+.character-summary__field-value {
+  color: var(--color-bleached);
+}
+
+.character-summary__attributes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-m);
+}
+
+.character-summary__attribute {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-m);
+  background: var(--color-void);
+  border: 1px solid var(--color-rust);
+}
+
+.character-summary__attribute-label {
+  font-size: 12px;
+  color: var(--color-smoke);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-primary);
+}
+
+.character-summary__attribute-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-rift-stable);
+  font-family: var(--font-display);
+}
+
+.character-summary__skills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+.character-summary__skill-item {
+  padding: var(--space-xs) var(--space-m);
+  background: var(--color-void);
+  border: 1px solid var(--color-rift-stable);
+  color: var(--color-rift-stable);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.character-summary__appearance-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}

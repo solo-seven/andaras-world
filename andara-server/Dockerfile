@@ -27,8 +27,7 @@ COPY andara-api/src ./andara-api/src
 COPY andara-application/src ./andara-application/src
 COPY andara-domain/src ./andara-domain/src
 COPY andara-infrastructure/src ./andara-infrastructure/src
-# andara-query may not have src directory yet - create empty structure
-RUN mkdir -p ./andara-query/src/main/java ./andara-query/src/main/resources
+COPY andara-query/src ./andara-query/src
 COPY andara-common/src ./andara-common/src
 COPY andara-server-app/src ./andara-server-app/src
 

@@ -50,6 +50,7 @@ public class CharacterController {
             request.appearance().toDomain(),
             request.isProtagonist(),
             request.instanceId(),
+            request.partyId(),
             request.agentId()
         );
 

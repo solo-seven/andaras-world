@@ -28,6 +28,16 @@
   font-family: var(--font-primary);
 }
 
+.andara-stepper__step--upcoming .andara-stepper__indicator {
+  border-color: var(--color-ash);
+  background: var(--color-concrete);
+  color: var(--color-ash);
+}
+
+.andara-stepper__step--upcoming .andara-stepper__label {
+  color: var(--color-ash);
+}
+
 .andara-stepper__step--active .andara-stepper__indicator {
   border-color: var(--color-rift-stable);
   background: var(--color-rift-stable);
@@ -39,6 +49,11 @@
   border-color: var(--color-rift-healing);
   background: var(--color-rift-healing);
   color: var(--color-void);
+  font-size: 18px;
+}
+
+.andara-stepper__step--completed .andara-stepper__label {
+  color: var(--color-rift-healing);
 }
 
 .andara-stepper__label {

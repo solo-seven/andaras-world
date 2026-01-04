@@ -140,6 +140,19 @@ export const AttributeDistributionStep: React.FC = () => {
     dispatch(setStep('origin'));
   };
 
+  const handleReset = () => {
+    const resetAttributes: Attributes = {
+      strength: BASE_ATTRIBUTE,
+      agility: BASE_ATTRIBUTE,
+      endurance: BASE_ATTRIBUTE,
+      intellect: BASE_ATTRIBUTE,
+      perception: BASE_ATTRIBUTE,
+      charisma: BASE_ATTRIBUTE,
+    };
+    setAttributes(resetAttributes);
+    dispatch(setValidationErrors({}));
+  };
+
   return (
     <div className="andara-attribute-distribution-step">
       <header className="andara-attribute-distribution-step__header">
@@ -173,7 +186,12 @@ export const AttributeDistributionStep: React.FC = () => {
               <div className="andara-attribute-distribution-step__panel-title">
                 Core Attributes
               </div>
-              <PointsRemaining points={pointsRemaining} />
+              <div style={{ display: 'flex', gap: 'var(--space-m)', alignItems: 'center' }}>
+                <PointsRemaining points={pointsRemaining} />
+                <Button variant="secondary" onClick={handleReset} type="button">
+                  Reset
+                </Button>
+              </div>
             </div>
 
             {ATTRIBUTE_CONFIG.map((config) => (

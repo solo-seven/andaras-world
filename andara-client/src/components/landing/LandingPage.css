@@ -1,0 +1,73 @@
+@import '../ui/ui-components.css';
+
+.landing-page {
+  min-height: 100vh;
+  background-color: var(--color-void);
+  color: var(--color-bleached);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanlines effect */
+.landing-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.02) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.landing-page__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: var(--space-xxl);
+}
+
+.landing-page__title {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 52px;
+  margin-bottom: var(--space-xxl);
+  color: var(--color-bleached);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 20px rgba(77, 166, 255, 0.3);
+}
+
+.landing-page__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+  align-items: center;
+}
+
+.landing-page__actions .andara-button {
+  min-width: 200px;
+}
+
+/* Rift glow on primary button */
+.landing-page__actions .andara-button--primary {
+  box-shadow: 0 0 12px rgba(77, 166, 255, 0.3),
+              0 0 24px rgba(77, 166, 255, 0.15);
+}
+
+.landing-page__actions .andara-button--primary:hover:not(.andara-button--disabled) {
+  box-shadow: 0 0 16px rgba(77, 166, 255, 0.5),
+              0 0 32px rgba(77, 166, 255, 0.25),
+              0 0 48px rgba(77, 166, 255, 0.1);
+}

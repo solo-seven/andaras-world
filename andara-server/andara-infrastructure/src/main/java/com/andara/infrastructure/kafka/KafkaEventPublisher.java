@@ -1,6 +1,6 @@
 package com.andara.infrastructure.kafka;
 
-import com.andara.application.party.EventPublisher;
+import com.andara.infrastructure.EventPublisher;
 import com.andara.domain.DomainEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -33,7 +33,18 @@ public class KafkaEventPublisher implements EventPublisher {
         for (DomainEvent event : events) {
             try {
                 String topic = determineTopic(event);
-                String key = event.getAggregateId();
+                // Use instanceId as the partition key to ensure all events for the same instance
+                // are processed in order within the same partition, preventing out-of-order issues
+                // Fall back to aggregateId if instanceId is missing (defensive against future event types)
+                String instanceId = event.getMetadata().get("instanceId");
+                String key = instanceId != null ? instanceId : event.getAggregateId();
+                
+                if (instanceId == null) {
+                    log.warn("Event {} of type {} is missing instanceId in metadata. " +
+                        "Using aggregateId {} as partition key. This may break ordering guarantees.",
+                        event.getEventId(), event.getEventType(), event.getAggregateId());
+                }
+                
                 String value = serializeEvent(event);
 
                 kafkaTemplate.send(topic, key, value)
@@ -41,7 +52,8 @@ public class KafkaEventPublisher implements EventPublisher {
                         if (ex != null) {
                             log.error("Failed to publish event {} to topic {}", event.getEventId(), topic, ex);
                         } else {
-                            log.debug("Published event {} to topic {}", event.getEventId(), topic);
+                            log.debug("Published event {} to topic {} with partition key {} (instanceId: {})", 
+                                event.getEventId(), topic, key, instanceId != null ? instanceId : "none");
                         }
                     });
             } catch (Exception e) {
@@ -53,7 +65,7 @@ public class KafkaEventPublisher implements EventPublisher {
     private String determineTopic(DomainEvent event) {
         // Route events to appropriate topics based on aggregate type
         return switch (event.getAggregateType()) {
-            case "Character", "Party" -> PARTY_EVENTS_TOPIC;
+            case "Character", "Party", "Instance" -> PARTY_EVENTS_TOPIC;
             default -> "andara.events.general";
         };
     }

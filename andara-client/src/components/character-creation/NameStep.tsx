@@ -20,9 +20,25 @@ export const NameStep: React.FC = () => {
       dispatch(setValidationErrors({ name: 'Please enter a character name' }));
       return;
     }
-    if (trimmedName.length > 50) {
+    if (trimmedName.length < 2) {
       dispatch(
-        setValidationErrors({ name: 'Name must be 50 characters or less' })
+        setValidationErrors({ name: 'Name must be at least 2 characters' })
+      );
+      return;
+    }
+    if (trimmedName.length > 30) {
+      dispatch(
+        setValidationErrors({ name: 'Name must be 30 characters or less' })
+      );
+      return;
+    }
+    // Validate: alphanumeric + spaces/apostrophes/hyphens
+    const nameRegex = /^[a-zA-Z0-9\s'-]+$/;
+    if (!nameRegex.test(trimmedName)) {
+      dispatch(
+        setValidationErrors({
+          name: 'Name can only contain letters, numbers, spaces, apostrophes, and hyphens',
+        })
       );
       return;
     }
@@ -48,14 +64,22 @@ export const NameStep: React.FC = () => {
             dispatch(setValidationErrors({}));
           }}
           placeholder="Enter character name"
-          maxLength={50}
+          maxLength={30}
         />
-        <div className="char-count">{name.length} / 50</div>
+        <div className="char-count">{name.length} / 30</div>
       </div>
 
       <div className="step-actions">
         <button onClick={() => dispatch(setStep('appearance'))}>Back</button>
-        <button onClick={handleNext} disabled={!name || name.trim().length === 0 || name.trim().length > 50}>
+        <button
+          onClick={handleNext}
+          disabled={
+            !name ||
+            name.trim().length < 2 ||
+            name.trim().length > 30 ||
+            !/^[a-zA-Z0-9\s'-]+$/.test(name.trim())
+          }
+        >
           Next: Review
         </button>
       </div>

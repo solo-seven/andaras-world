@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type {
   Origin,
   Attributes,
@@ -6,6 +6,8 @@ import type {
   OriginDefinition,
   Skill,
 } from '../../types/character';
+import { startNewGame, retryWithBackoff } from '../../api/gameApi';
+import { setGameIds } from './gameSlice';
 
 export type CharacterCreationStep =
   | 'origin'
@@ -48,6 +50,66 @@ const initialState: CharacterCreationState = {
   isSubmitting: false,
   createdCharacterId: null,
 };
+
+/**
+ * Async thunk to start a new game with character creation.
+ * Includes retry logic with exponential backoff.
+ */
+export const startNewGameAsync = createAsyncThunk<
+  { instanceId: string; partyId: string; characterId: string },
+  void,
+  { state: { characterCreation: CharacterCreationState } }
+>(
+  'characterCreation/startNewGame',
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    const state = getState().characterCreation;
+    const { formData } = state;
+
+    if (
+      !formData.name ||
+      !formData.origin ||
+      !formData.attributes ||
+      formData.skillFocuses.length !== 2 ||
+      !formData.appearance
+    ) {
+      return rejectWithValue('Character data incomplete');
+    }
+
+    try {
+      const response = await retryWithBackoff(async () => {
+        return await startNewGame({
+          name: formData.name,
+          origin: formData.origin!,
+          attributes: formData.attributes!,
+          skillFocuses: formData.skillFocuses,
+          appearance: formData.appearance!,
+        });
+      }, 3, 1000);
+
+      if (!response.success) {
+        return rejectWithValue(response.error || 'Failed to create character');
+      }
+
+      // Store game IDs in game slice
+      dispatch(
+        setGameIds({
+          instanceId: response.instanceId,
+          partyId: response.partyId,
+        })
+      );
+
+      return {
+        instanceId: response.instanceId,
+        partyId: response.partyId,
+        characterId: response.characterId,
+      };
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : 'Failed to create character'
+      );
+    }
+  }
+);
 
 const characterCreationSlice = createSlice({
   name: 'characterCreation',
@@ -97,6 +159,25 @@ const characterCreationSlice = createSlice({
       state.createdCharacterId = null;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(startNewGameAsync.pending, (state) => {
+        state.isSubmitting = true;
+        state.validationErrors = {};
+      })
+      .addCase(startNewGameAsync.fulfilled, (state, action) => {
+        state.isSubmitting = false;
+        state.createdCharacterId = action.payload.characterId;
+        state.validationErrors = {};
+      })
+      .addCase(startNewGameAsync.rejected, (state, action) => {
+        state.isSubmitting = false;
+        state.validationErrors = {
+          submit:
+            (action.payload as string) || 'Failed to create character. Please try again.',
+        };
+      });
+  },
 });
 
 export const {
@@ -111,4 +192,3 @@ export const {
 } = characterCreationSlice.actions;
 
 export default characterCreationSlice.reducer;
-

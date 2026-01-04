@@ -1,0 +1,86 @@
+@import '../ui/ui-components.css';
+
+.character-sheet {
+  min-height: 100vh;
+  background-color: var(--color-void);
+  color: var(--color-bleached);
+  padding: var(--space-xxl);
+  display: flex;
+  flex-direction: column;
+}
+
+.character-sheet__header {
+  margin-bottom: var(--space-xxl);
+  text-align: center;
+}
+
+.character-sheet__title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--color-bleached);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.character-sheet__main {
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.character-sheet__loading {
+  text-align: center;
+  padding: var(--space-xxl);
+  color: var(--color-smoke);
+  font-family: var(--font-primary);
+}
+
+.character-sheet__health {
+  margin-top: var(--space-xl);
+  padding: var(--space-l);
+  background: var(--color-concrete);
+  border: 1px solid var(--color-rust);
+}
+
+.character-sheet__health-label {
+  font-family: var(--font-display);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-smoke);
+  margin-bottom: var(--space-s);
+}
+
+.character-sheet__health-bar {
+  width: 100%;
+  height: 24px;
+  background: var(--color-void);
+  border: 1px solid var(--color-rust);
+  position: relative;
+  margin-bottom: var(--space-s);
+}
+
+.character-sheet__health-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-rift-healing), var(--color-rift-stable));
+  transition: width 0.3s ease;
+}
+
+.character-sheet__health-value {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--color-bleached);
+  text-align: center;
+}
+
+.character-sheet__actions {
+  margin-top: var(--space-xxl);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-l);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-rust);
+}

@@ -41,6 +41,7 @@ class CharacterControllerTest {
     void createCharacter_validRequest_shouldReturnCreated() throws Exception {
         UUID characterId = UUID.randomUUID();
         UUID instanceId = UUID.randomUUID();
+        UUID partyId = UUID.randomUUID();
         UUID agentId = UUID.randomUUID();
 
         CharacterCreated event = CharacterCreated.create(
@@ -52,6 +53,7 @@ class CharacterControllerTest {
             Appearance.defaultAppearance(),
             true,
             instanceId,
+            partyId,
             agentId
         );
 
@@ -68,6 +70,7 @@ class CharacterControllerTest {
             ),
             true,
             instanceId,
+            partyId,
             agentId
         );
 
@@ -97,4 +100,3 @@ class CharacterControllerTest {
             .andExpect(jsonPath("$[0].name").exists());
     }
 }
-

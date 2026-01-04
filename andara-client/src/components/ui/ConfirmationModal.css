@@ -1,0 +1,58 @@
+@import './ui-components.css';
+
+.confirmation-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.confirmation-modal {
+  background: var(--color-concrete);
+  border: 1px solid var(--color-rust);
+  border-radius: 2px;
+  padding: var(--space-xl);
+  max-width: 500px;
+  width: 90%;
+  box-shadow: var(--shadow-panel);
+  position: relative;
+}
+
+.confirmation-modal__header {
+  margin-bottom: var(--space-l);
+  border-bottom: 1px solid var(--color-rust);
+  padding-bottom: var(--space-m);
+}
+
+.confirmation-modal__title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-bleached);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.confirmation-modal__body {
+  margin-bottom: var(--space-xl);
+}
+
+.confirmation-modal__message {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--color-paper);
+  line-height: 1.6;
+}
+
+.confirmation-modal__footer {
+  display: flex;
+  gap: var(--space-m);
+  justify-content: flex-end;
+}
