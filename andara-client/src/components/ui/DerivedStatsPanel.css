@@ -1,0 +1,47 @@
+@import './ui-components.css';
+
+.andara-derived-stats-panel {
+  background: var(--color-concrete);
+  border: 1px solid var(--color-rust);
+  padding: var(--space-l);
+}
+
+.andara-derived-stats-panel__title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: var(--space-m);
+  color: var(--color-rift-temporal);
+}
+
+.andara-derived-stats-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.andara-derived-stats-panel__stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-s) 0;
+  border-bottom: 1px solid var(--color-steel);
+  font-size: 12px;
+  font-family: var(--font-primary);
+}
+
+.andara-derived-stats-panel__stat:last-child {
+  border-bottom: none;
+}
+
+.andara-derived-stats-panel__label {
+  color: var(--color-smoke);
+}
+
+.andara-derived-stats-panel__value {
+  color: var(--color-rift-stable);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+

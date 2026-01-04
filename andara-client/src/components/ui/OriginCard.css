@@ -1,0 +1,152 @@
+@import './ui-components.css';
+
+.andara-origin-card {
+  background: var(--color-concrete);
+  border: 1px solid var(--color-rust);
+  height: 420px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.andara-origin-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.02) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.andara-origin-card:hover {
+  border-color: var(--color-rift-stable);
+  transform: translateY(-4px);
+  box-shadow: 
+    0 0 16px rgba(77, 166, 255, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.andara-origin-card:focus {
+  outline: 2px solid var(--color-rift-stable);
+  outline-offset: 2px;
+}
+
+.andara-origin-card--selected {
+  border: 2px solid var(--color-rift-stable);
+  background: rgba(77, 166, 255, 0.05);
+  box-shadow: 
+    0 0 20px rgba(77, 166, 255, 0.4),
+    inset 0 0 40px rgba(77, 166, 255, 0.05);
+}
+
+.andara-origin-card--selected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 2px;
+  background: var(--color-rift-stable);
+  box-shadow: 0 0 8px var(--color-rift-stable);
+  z-index: 1;
+}
+
+.andara-origin-card--selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 12px;
+  background: var(--color-rift-stable);
+  box-shadow: 0 0 8px var(--color-rift-stable);
+  z-index: 1;
+}
+
+.andara-origin-card__image {
+  width: 100%;
+  height: 200px;
+  background: var(--color-steel);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.andara-origin-card__icon {
+  font-size: 48px;
+  color: var(--color-ash);
+  opacity: 0.3;
+  font-family: var(--font-display);
+}
+
+.andara-origin-card__content {
+  padding: var(--space-l);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.andara-origin-card__name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-bleached);
+  margin-bottom: var(--space-s);
+  margin-top: 0;
+}
+
+.andara-origin-card__description {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-smoke);
+  margin-bottom: var(--space-m);
+  margin-top: 0;
+  flex: 1;
+}
+
+.andara-origin-card__stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.andara-origin-card__stat-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font-size: 11px;
+}
+
+.andara-origin-card__stat-label {
+  color: var(--color-dust);
+  min-width: 80px;
+  font-family: var(--font-primary);
+}
+
+.andara-origin-card__stat-value {
+  color: var(--color-rift-stable);
+  font-weight: 500;
+  font-family: var(--font-primary);
+}
+
+.andara-origin-card__stat-value--positive {
+  color: var(--color-rift-healing);
+}
+
+.andara-origin-card__stat-value--negative {
+  color: var(--color-rift-volatile);
+}
+

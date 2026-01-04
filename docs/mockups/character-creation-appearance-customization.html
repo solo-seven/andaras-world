@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andara's World - Appearance</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-void: #0a0e14;
+            --color-concrete: #1a1f28;
+            --color-steel: #2d3542;
+            --color-rust: #3d4451;
+            --color-ash: #555d6d;
+            --color-dust: #7a8291;
+            --color-smoke: #9ba3b4;
+            --color-paper: #c5cdd8;
+            --color-bleached: #e3e8ef;
+            
+            --color-rift-stable: #4da6ff;
+            --color-rift-active: #80c0ff;
+            --color-rift-volatile: #ff6b6b;
+            --color-rift-healing: #4dffb8;
+            --color-rift-temporal: #ffdb4d;
+            
+            --space-xs: 4px;
+            --space-s: 8px;
+            --space-m: 16px;
+            --space-l: 24px;
+            --space-xl: 32px;
+            --space-xxl: 48px;
+            
+            --font-primary: 'IBM Plex Mono', monospace;
+            --font-display: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--color-void);
+            color: var(--color-bleached);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(77, 166, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(217, 70, 255, 0.02) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: var(--space-xxl);
+        }
+
+        .header {
+            margin-bottom: var(--space-xxl);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-rift-stable);
+            text-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+            margin-bottom: var(--space-l);
+        }
+
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-s);
+            margin-bottom: var(--space-xxl);
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: var(--space-s);
+        }
+
+        .step-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid var(--color-ash);
+            background: var(--color-concrete);
+            color: var(--color-ash);
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-indicator {
+            border-color: var(--color-rift-stable);
+            background: var(--color-rift-stable);
+            color: var(--color-void);
+            box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
+        }
+
+        .step.completed .step-indicator {
+            border-color: var(--color-rift-healing);
+            background: var(--color-rift-healing);
+            color: var(--color-void);
+        }
+
+        .step.completed .step-indicator::after {
+            content: '✓';
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: var(--color-smoke);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .step.active .step-label {
+            color: var(--color-bleached);
+        }
+
+        .step-connector {
+            width: 48px;
+            height: 2px;
+            background: var(--color-rust);
+        }
+
+        .step.completed + .step-connector {
+            background: var(--color-rift-healing);
+        }
+
+        .screen-title {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: var(--space-m);
+        }
+
+        .screen-subtitle {
+            font-size: 14px;
+            color: var(--color-smoke);
+            margin-bottom: var(--space-xxl);
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        /* Main Layout */
+        .appearance-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xxl);
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            background: var(--color-concrete);
+            border: 1px solid var(--color-rust);
+            padding: var(--space-l);
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-header {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--space-l);
+            padding-bottom: var(--space-m);
+            border-bottom: 1px solid var(--color-rift-stable);
+        }
+
+        .preview-viewport {
+            flex: 1;
+            background: var(--color-steel);
+            border: 1px solid var(--color-rust);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-silhouette {
+            width: 200px;
+            height: 400px;
+            background: var(--color-ash);
+            opacity: 0.3;
+            clip-path: polygon(
+                50% 0%, 
+                60% 10%, 70% 15%, 70% 25%, 
+                80% 30%, 80% 60%, 
+                75% 70%, 70% 100%, 
+                60% 100%, 55% 70%, 50% 65%,
+                45% 70%, 40% 100%,
+                30% 100%, 25% 70%,
+                20% 60%, 20% 30%,
+                30% 25%, 30% 15%, 40% 10%
+            );
+        }
+
+        .preview-info {
+            margin-top: var(--space-m);
+            padding-top: var(--space-m);
+            border-top: 1px solid var(--color-rust);
+            font-size: 11px;
+            color: var(--color-dust);
+            text-align: center;
+        }
+
+        /* Options Panel */
+        .options-panel {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-l);
+        }
+
+        .option-group {
+            background: var(--color-concrete);
+            border: 1px solid var(--color-rust);
+            padding: var(--space-l);
+        }
+
+        .option-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-bleached);
+            margin-bottom: var(--space-m);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-value {
+            font-size: 12px;
+            color: var(--color-rift-stable);
+            font-weight: 500;
+        }
+
+        /* Option Buttons */
+        .option-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: var(--space-s);
+        }
+
+        .option-btn {
+            padding: var(--space-m);
+            background: var(--color-steel);
+            border: 1px solid var(--color-rust);
+            color: var(--color-smoke);
+            font-family: var(--font-primary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .option-btn:hover {
+            border-color: var(--color-rift-stable);
+            color: var(--color-bleached);
+        }
+
+        .option-btn.selected {
+            border-color: var(--color-rift-stable);
+            background: rgba(77, 166, 255, 0.15);
+            color: var(--color-rift-stable);
+            box-shadow: inset 0 0 8px rgba(77, 166, 255, 0.2);
+        }
+
+        /* Color Swatches */
+        .color-swatches {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+            gap: var(--space-s);
+        }
+
+        .color-swatch {
+            width: 48px;
+            height: 48px;
+            border: 2px solid var(--color-rust);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .color-swatch:hover {
+            border-color: var(--color-rift-stable);
+            transform: scale(1.05);
+        }
+
+        .color-swatch.selected {
+            border-color: var(--color-rift-stable);
+            box-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+        }
+
+        .color-swatch.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 20px;
+            text-shadow: 0 0 4px black;
+        }
+
+        /* Preset Colors */
+        .swatch-black { background: #1a1a1a; }
+        .swatch-brown { background: #3d2817; }
+        .swatch-blonde { background: #c4a265; }
+        .swatch-red { background: #8b3a3a; }
+        .swatch-white { background: #e8e8e8; }
+        .swatch-blue { background: #2c4a6d; }
+
+        .swatch-pale { background: #f5d5c1; }
+        .swatch-fair { background: #e8b89a; }
+        .swatch-medium { background: #c68967; }
+        .swatch-tan { background: #9d6b4f; }
+        .swatch-brown-skin { background: #6b4532; }
+        .swatch-dark { background: #3d2817; }
+
+        .swatch-green { background: #4a6d4a; }
+        .swatch-blue-eyes { background: #4d7a9d; }
+        .swatch-hazel { background: #7a6d4a; }
+        .swatch-gray { background: #6d6d6d; }
+        .swatch-amber { background: #c4a265; }
+
+        /* Slider */
+        .slider-control {
+            margin-top: var(--space-m);
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--color-void);
+            border: 1px solid var(--color-rust);
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--color-rift-stable);
+            border: 2px solid var(--color-rift-active);
+            transform: rotate(45deg);
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--space-l);
+            border-top: 1px solid var(--color-rust);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: 1px solid var(--color-ash);
+            background: linear-gradient(135deg, var(--color-steel) 0%, var(--color-concrete) 100%);
+            color: var(--color-bleached);
+            font-family: var(--font-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            border-color: var(--color-rift-stable);
+            box-shadow: 0 0 12px rgba(77, 166, 255, 0.3);
+        }
+
+        .btn-primary {
+            border-color: var(--color-rift-stable);
+            background: var(--color-rift-stable);
+            color: var(--color-void);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-rift-active);
+            box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border-color: var(--color-rust);
+        }
+
+        .randomize-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-s);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">ANDARA'S WORLD</div>
+            
+            <div class="stepper">
+                <div class="step completed">
+                    <div class="step-indicator"></div>
+                    <div class="step-label">Origin</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step completed">
+                    <div class="step-indicator"></div>
+                    <div class="step-label">Attributes</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step completed">
+                    <div class="step-indicator"></div>
+                    <div class="step-label">Skills</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step active">
+                    <div class="step-indicator">4</div>
+                    <div class="step-label">Appearance</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-indicator">5</div>
+                    <div class="step-label">Identity</div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <h1 class="screen-title">Customize Appearance</h1>
+            <p class="screen-subtitle">
+                Define your protagonist's physical appearance. These choices are cosmetic and do not affect gameplay. You can randomize all options at any time.
+            </p>
+
+            <div class="appearance-layout">
+                <!-- Preview -->
+                <div class="preview-panel">
+                    <div class="preview-header">Character Preview</div>
+                    <div class="preview-viewport">
+                        <div class="character-silhouette"></div>
+                    </div>
+                    <div class="preview-info">
+                        Visual preview would render here with actual 3D model or sprite
+                    </div>
+                </div>
+
+                <!-- Options -->
+                <div class="options-panel">
+                    <!-- Gender/Body Type -->
+                    <div class="option-group">
+                        <div class="option-label">
+                            Body Type
+                            <span class="option-value">Masculine</span>
+                        </div>
+                        <div class="option-buttons">
+                            <button class="option-btn selected" onclick="selectOption('body', 'Masculine', this)">Masculine</button>
+                            <button class="option-btn" onclick="selectOption('body', 'Feminine', this)">Feminine</button>
+                            <button class="option-btn" onclick="selectOption('body', 'Neutral', this)">Neutral</button>
+                        </div>
+                    </div>
+
+                    <!-- Hair Style -->
+                    <div class="option-group">
+                        <div class="option-label">
+                            Hair Style
+                            <span class="option-value">Short</span>
+                        </div>
+                        <div class="option-buttons">
+                            <button class="option-btn" onclick="selectOption('hair', 'Bald', this)">Bald</button>
+                            <button class="option-btn selected" onclick="selectOption('hair', 'Short', this)">Short</button>
+                            <button class="option-btn" onclick="selectOption('hair', 'Medium', this)">Medium</button>
+                            <button class="option-btn" onclick="selectOption('hair', 'Long', this)">Long</button>
+                            <button class="option-btn" onclick="selectOption('hair', 'Mohawk', this)">Mohawk</button>
+                            <button class="option-btn" onclick="selectOption('hair', 'Braided', this)">Braided</button>
+                        </div>
+                    </div>
+
+                    <!-- Hair Color -->
+                    <div class="option-group">
+                        <div class="option-label">
+                            Hair Color
+                            <span class="option-value">Black</span>
+                        </div>
+                        <div class="color-swatches">
+                            <div class="color-swatch swatch-black selected" onclick="selectColor('hair', 'Black', this)"></div>
+                            <div class="color-swatch swatch-brown" onclick="selectColor('hair', 'Brown', this)"></div>
+                            <div class="color-swatch swatch-blonde" onclick="selectColor('hair', 'Blonde', this)"></div>
+                            <div class="color-swatch swatch-red" onclick="selectColor('hair', 'Red', this)"></div>
+                            <div class="color-swatch swatch-white" onclick="selectColor('hair', 'White', this)"></div>
+                            <div class="color-swatch swatch-blue" onclick="selectColor('hair', 'Blue', this)"></div>
+                        </div>
+                    </div>
+
+                    <!-- Skin Tone -->
+                    <div class="option-group">
+                        <div class="option-label">
+                            Skin Tone
+                            <span class="option-value">Fair</span>
+                        </div>
+                        <div class="color-swatches">
+                            <div class="color-swatch swatch-pale" onclick="selectColor('skin', 'Pale', this)"></div>
+                            <div class="color-swatch swatch-fair selected" onclick="selectColor('skin', 'Fair', this)"></div>
+                            <div class="color-swatch swatch-medium" onclick="selectColor('skin', 'Medium', this)"></div>
+                            <div class="color-swatch swatch-tan" onclick="selectColor('skin', 'Tan', this)"></div>
+                            <div class="color-swatch swatch-brown-skin" onclick="selectColor('skin', 'Brown', this)"></div>
+                            <div class="color-swatch swatch-dark" onclick="selectColor('skin', 'Dark', this)"></div>
+                        </div>
+                    </div>
+
+                    <!-- Eye Color -->
+                    <div class="option-group">
+                        <div class="option-label">
+                            Eye Color
+                            <span class="option-value">Blue</span>
+                        </div>
+                        <div class="color-swatches">
+                            <div class="color-swatch swatch-brown" onclick="selectColor('eyes', 'Brown', this)"></div>
+                            <div class="color-swatch swatch-blue-eyes selected" onclick="selectColor('eyes', 'Blue', this)"></div>
+                            <div class="color-swatch swatch-green" onclick="selectColor('eyes', 'Green', this)"></div>
+                            <div class="color-swatch swatch-hazel" onclick="selectColor('eyes', 'Hazel', this)"></div>
+                            <div class="color-swatch swatch-gray" onclick="selectColor('eyes', 'Gray', this)"></div>
+                            <div class="color-swatch swatch-amber" onclick="selectColor('eyes', 'Amber', this)"></div>
+                        </div>
+                    </div>
+
+                    <!-- Age Slider -->
+                    <div class="option-group">
+                        <div class="option-label">
+                            Age Appearance
+                            <span class="option-value" id="ageValue">32</span>
+                        </div>
+                        <div class="slider-control">
+                            <input type="range" min="18" max="70" value="32" class="slider" 
+                                   oninput="document.getElementById('ageValue').textContent = this.value">
+                        </div>
+                    </div>
+
+                    <!-- Scars/Marks -->
+                    <div class="option-group">
+                        <div class="option-label">
+                            Scars & Marks
+                            <span class="option-value">Weathered</span>
+                        </div>
+                        <div class="option-buttons">
+                            <button class="option-btn" onclick="selectOption('scars', 'None', this)">None</button>
+                            <button class="option-btn selected" onclick="selectOption('scars', 'Weathered', this)">Weathered</button>
+                            <button class="option-btn" onclick="selectOption('scars', 'Battle-Worn', this)">Battle-Worn</button>
+                            <button class="option-btn" onclick="selectOption('scars', 'Rift-Marked', this)">Rift-Marked</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="actions">
+            <button class="btn btn-secondary" onclick="alert('Return to Skills')">← Back</button>
+            <button class="btn randomize-btn" onclick="randomize()">
+                <span>⚄</span> Randomize All
+            </button>
+            <button class="btn btn-primary" onclick="alert('Proceeding to Identity')">Continue →</button>
+        </footer>
+    </div>
+
+    <script>
+        function selectOption(category, value, element) {
+            // Remove selected from siblings
+            element.parentElement.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected to clicked
+            element.classList.add('selected');
+            
+            // Update label
+            const group = element.closest('.option-group');
+            group.querySelector('.option-value').textContent = value;
+        }
+
+        function selectColor(category, value, element) {
+            // Remove selected from siblings
+            element.parentElement.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.classList.remove('selected');
+            });
+            
+            // Add selected to clicked
+            element.classList.add('selected');
+            
+            // Update label
+            const group = element.closest('.option-group');
+            group.querySelector('.option-value').textContent = value;
+        }
+
+        function randomize() {
+            alert('Randomizing all appearance options...');
+            // In real implementation, would randomly select options
+        }
+    </script>
+</body>
+</html>

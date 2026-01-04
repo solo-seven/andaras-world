@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andara's World - Attribute Allocation</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-void: #0a0e14;
+            --color-concrete: #1a1f28;
+            --color-steel: #2d3542;
+            --color-rust: #3d4451;
+            --color-ash: #555d6d;
+            --color-dust: #7a8291;
+            --color-smoke: #9ba3b4;
+            --color-paper: #c5cdd8;
+            --color-bleached: #e3e8ef;
+            
+            --color-rift-stable: #4da6ff;
+            --color-rift-active: #80c0ff;
+            --color-rift-volatile: #ff6b6b;
+            --color-rift-healing: #4dffb8;
+            --color-rift-temporal: #ffdb4d;
+            
+            --space-xs: 4px;
+            --space-s: 8px;
+            --space-m: 16px;
+            --space-l: 24px;
+            --space-xl: 32px;
+            --space-xxl: 48px;
+            
+            --font-primary: 'IBM Plex Mono', monospace;
+            --font-display: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--color-void);
+            color: var(--color-bleached);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(77, 166, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(217, 70, 255, 0.02) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: var(--space-xxl);
+        }
+
+        .header {
+            margin-bottom: var(--space-xxl);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-rift-stable);
+            text-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+            margin-bottom: var(--space-l);
+        }
+
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-s);
+            margin-bottom: var(--space-xxl);
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: var(--space-s);
+        }
+
+        .step-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid var(--color-ash);
+            background: var(--color-concrete);
+            color: var(--color-ash);
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-indicator {
+            border-color: var(--color-rift-stable);
+            background: var(--color-rift-stable);
+            color: var(--color-void);
+            box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
+        }
+
+        .step.completed .step-indicator {
+            border-color: var(--color-rift-healing);
+            background: var(--color-rift-healing);
+            color: var(--color-void);
+        }
+
+        .step.completed .step-indicator::after {
+            content: '✓';
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: var(--color-smoke);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .step.active .step-label {
+            color: var(--color-bleached);
+        }
+
+        .step-connector {
+            width: 48px;
+            height: 2px;
+            background: var(--color-rust);
+        }
+
+        .step.completed + .step-connector {
+            background: var(--color-rift-healing);
+        }
+
+        .screen-title {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: var(--space-m);
+        }
+
+        .screen-subtitle {
+            font-size: 14px;
+            color: var(--color-smoke);
+            margin-bottom: var(--space-xxl);
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        /* Content Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xxl);
+        }
+
+        /* Attribute Panel */
+        .attributes-panel {
+            background: var(--color-concrete);
+            border: 1px solid var(--color-rust);
+            padding: var(--space-l);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-l);
+            padding-bottom: var(--space-m);
+            border-bottom: 1px solid var(--color-rift-stable);
+        }
+
+        .panel-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .points-remaining {
+            font-size: 14px;
+            color: var(--color-rift-temporal);
+            font-weight: 600;
+        }
+
+        .points-remaining .number {
+            font-size: 24px;
+            font-family: var(--font-display);
+        }
+
+        /* Attribute Row */
+        .attribute {
+            margin-bottom: var(--space-l);
+        }
+
+        .attribute-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-s);
+        }
+
+        .attribute-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-bleached);
+            display: flex;
+            align-items: center;
+            gap: var(--space-s);
+        }
+
+        .attribute-abbr {
+            font-family: var(--font-display);
+            font-size: 12px;
+            color: var(--color-rift-stable);
+            opacity: 0.7;
+        }
+
+        .attribute-value {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-rift-stable);
+            text-shadow: 0 0 8px rgba(77, 166, 255, 0.3);
+            min-width: 48px;
+            text-align: right;
+        }
+
+        .attribute-description {
+            font-size: 11px;
+            color: var(--color-dust);
+            margin-bottom: var(--space-s);
+            line-height: 1.4;
+        }
+
+        /* Slider */
+        .slider-container {
+            position: relative;
+            margin-bottom: var(--space-s);
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--color-void);
+            border: 1px solid var(--color-rust);
+            outline: none;
+            position: relative;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--color-rift-stable);
+            border: 2px solid var(--color-rift-active);
+            transform: rotate(45deg);
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+            transition: all 0.1s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            box-shadow: 0 0 20px rgba(77, 166, 255, 0.8);
+            transform: rotate(45deg) scale(1.1);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--color-rift-stable);
+            border: 2px solid var(--color-rift-active);
+            transform: rotate(45deg);
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+        }
+
+        .slider-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--color-rift-stable), var(--color-rift-active));
+            border-radius: 0;
+            pointer-events: none;
+            box-shadow: inset 0 0 4px rgba(77, 166, 255, 0.3);
+        }
+
+        .slider-notches {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--color-ash);
+            margin-top: var(--space-xs);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-l);
+        }
+
+        .stat-summary {
+            background: var(--color-concrete);
+            border: 1px solid var(--color-rust);
+            padding: var(--space-l);
+        }
+
+        .stat-summary-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--space-m);
+            color: var(--color-rift-temporal);
+        }
+
+        .derived-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-s) 0;
+            border-bottom: 1px solid var(--color-steel);
+            font-size: 12px;
+        }
+
+        .derived-stat:last-child {
+            border-bottom: none;
+        }
+
+        .derived-stat-label {
+            color: var(--color-smoke);
+        }
+
+        .derived-stat-value {
+            color: var(--color-rift-stable);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .tips-panel {
+            background: var(--color-steel);
+            border: 1px solid var(--color-rust);
+            padding: var(--space-l);
+        }
+
+        .tips-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: var(--space-m);
+            color: var(--color-bleached);
+        }
+
+        .tip {
+            font-size: 11px;
+            color: var(--color-smoke);
+            line-height: 1.6;
+            margin-bottom: var(--space-s);
+            padding-left: var(--space-m);
+            position: relative;
+        }
+
+        .tip::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--color-rift-stable);
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--space-l);
+            border-top: 1px solid var(--color-rust);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: 1px solid var(--color-ash);
+            background: linear-gradient(135deg, var(--color-steel) 0%, var(--color-concrete) 100%);
+            color: var(--color-bleached);
+            font-family: var(--font-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            border-color: var(--color-rift-stable);
+            box-shadow: 0 0 12px rgba(77, 166, 255, 0.3);
+        }
+
+        .btn-primary {
+            border-color: var(--color-rift-stable);
+            background: var(--color-rift-stable);
+            color: var(--color-void);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-rift-active);
+            box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border-color: var(--color-rust);
+        }
+
+        .warning {
+            font-size: 12px;
+            color: var(--color-rift-volatile);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">ANDARA'S WORLD</div>
+            
+            <div class="stepper">
+                <div class="step completed">
+                    <div class="step-indicator"></div>
+                    <div class="step-label">Origin</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step active">
+                    <div class="step-indicator">2</div>
+                    <div class="step-label">Attributes</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-indicator">3</div>
+                    <div class="step-label">Skills</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-indicator">4</div>
+                    <div class="step-label">Appearance</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-indicator">5</div>
+                    <div class="step-label">Identity</div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <h1 class="screen-title">Distribute Attributes</h1>
+            <p class="screen-subtitle">
+                You have <strong>27 points</strong> to distribute among six core attributes. Each attribute starts at 8. The range is 6–16 per attribute. Attributes affect combat effectiveness, carry capacity, skill checks, and more.
+            </p>
+
+            <div class="content-grid">
+                <!-- Attributes Panel -->
+                <div class="attributes-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Core Attributes</div>
+                        <div class="points-remaining">
+                            <span class="number" id="pointsRemaining">12</span> points remaining
+                        </div>
+                    </div>
+
+                    <!-- STR -->
+                    <div class="attribute">
+                        <div class="attribute-header">
+                            <div class="attribute-name">
+                                Strength
+                                <span class="attribute-abbr">STR</span>
+                            </div>
+                            <div class="attribute-value" id="strValue">10</div>
+                        </div>
+                        <div class="attribute-description">
+                            Melee damage, carry capacity, physical checks
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-track" id="strTrack" style="width: 40%;"></div>
+                            <input type="range" min="6" max="16" value="10" class="slider" id="strSlider" oninput="updateAttribute('str', this.value)">
+                        </div>
+                        <div class="slider-notches">
+                            <span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
+                        </div>
+                    </div>
+
+                    <!-- AGI -->
+                    <div class="attribute">
+                        <div class="attribute-header">
+                            <div class="attribute-name">
+                                Agility
+                                <span class="attribute-abbr">AGI</span>
+                            </div>
+                            <div class="attribute-value" id="agiValue">11</div>
+                        </div>
+                        <div class="attribute-description">
+                            Initiative, ranged accuracy, evasion, movement
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-track" id="agiTrack" style="width: 50%;"></div>
+                            <input type="range" min="6" max="16" value="11" class="slider" id="agiSlider" oninput="updateAttribute('agi', this.value)">
+                        </div>
+                        <div class="slider-notches">
+                            <span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
+                        </div>
+                    </div>
+
+                    <!-- END -->
+                    <div class="attribute">
+                        <div class="attribute-header">
+                            <div class="attribute-name">
+                                Endurance
+                                <span class="attribute-abbr">END</span>
+                            </div>
+                            <div class="attribute-value" id="endValue">9</div>
+                        </div>
+                        <div class="attribute-description">
+                            Health pool, stamina, resistance to injury/toxins
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-track" id="endTrack" style="width: 30%;"></div>
+                            <input type="range" min="6" max="16" value="9" class="slider" id="endSlider" oninput="updateAttribute('end', this.value)">
+                        </div>
+                        <div class="slider-notches">
+                            <span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
+                        </div>
+                    </div>
+
+                    <!-- INT -->
+                    <div class="attribute">
+                        <div class="attribute-header">
+                            <div class="attribute-name">
+                                Intellect
+                                <span class="attribute-abbr">INT</span>
+                            </div>
+                            <div class="attribute-value" id="intValue">8</div>
+                        </div>
+                        <div class="attribute-description">
+                            Tech skills, crafting quality, ability cooldowns
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-track" id="intTrack" style="width: 20%;"></div>
+                            <input type="range" min="6" max="16" value="8" class="slider" id="intSlider" oninput="updateAttribute('int', this.value)">
+                        </div>
+                        <div class="slider-notches">
+                            <span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
+                        </div>
+                    </div>
+
+                    <!-- PER -->
+                    <div class="attribute">
+                        <div class="attribute-header">
+                            <div class="attribute-name">
+                                Perception
+                                <span class="attribute-abbr">PER</span>
+                            </div>
+                            <div class="attribute-value" id="perValue">8</div>
+                        </div>
+                        <div class="attribute-description">
+                            Detection, ranged accuracy, critical chance, arcane sensitivity
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-track" id="perTrack" style="width: 20%;"></div>
+                            <input type="range" min="6" max="16" value="8" class="slider" id="perSlider" oninput="updateAttribute('per', this.value)">
+                        </div>
+                        <div class="slider-notches">
+                            <span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
+                        </div>
+                    </div>
+
+                    <!-- CHA -->
+                    <div class="attribute">
+                        <div class="attribute-header">
+                            <div class="attribute-name">
+                                Charisma
+                                <span class="attribute-abbr">CHA</span>
+                            </div>
+                            <div class="attribute-value" id="chaValue">8</div>
+                        </div>
+                        <div class="attribute-description">
+                            Barter prices, companion morale, faction standing gains
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-track" id="chaTrack" style="width: 20%;"></div>
+                            <input type="range" min="6" max="16" value="8" class="slider" id="chaSlider" oninput="updateAttribute('cha', this.value)">
+                        </div>
+                        <div class="slider-notches">
+                            <span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Panel -->
+                <div class="info-panel">
+                    <div class="stat-summary">
+                        <div class="stat-summary-title">Derived Statistics</div>
+                        <div class="derived-stat">
+                            <span class="derived-stat-label">Max Health</span>
+                            <span class="derived-stat-value" id="maxHealth">90</span>
+                        </div>
+                        <div class="derived-stat">
+                            <span class="derived-stat-label">Max Stamina</span>
+                            <span class="derived-stat-value" id="maxStamina">85</span>
+                        </div>
+                        <div class="derived-stat">
+                            <span class="derived-stat-label">Carry Weight</span>
+                            <span class="derived-stat-value" id="carryWeight">110 kg</span>
+                        </div>
+                        <div class="derived-stat">
+                            <span class="derived-stat-label">Initiative Bonus</span>
+                            <span class="derived-stat-value" id="initiative">+3</span>
+                        </div>
+                        <div class="derived-stat">
+                            <span class="derived-stat-label">Base Action Points</span>
+                            <span class="derived-stat-value">3 AP</span>
+                        </div>
+                        <div class="derived-stat">
+                            <span class="derived-stat-label">Critical Chance</span>
+                            <span class="derived-stat-value" id="critChance">7%</span>
+                        </div>
+                    </div>
+
+                    <div class="tips-panel">
+                        <div class="tips-title">Build Tips</div>
+                        <div class="tip">Wastelanders benefit from high END and PER for survival</div>
+                        <div class="tip">16+ in any attribute grants special bonuses</div>
+                        <div class="tip">Balanced builds are viable, but specialization is powerful</div>
+                        <div class="tip">Low CHA makes trading more expensive but doesn't lock content</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="actions">
+            <button class="btn btn-secondary" onclick="alert('Return to Origin')">← Back</button>
+            <span class="warning" id="warning" style="display: none;">You must spend all points</span>
+            <button class="btn btn-primary" onclick="continueNext()">Continue →</button>
+        </footer>
+    </div>
+
+    <script>
+        const baseValue = 8;
+        const totalPoints = 27;
+        let attributes = {
+            str: 10,
+            agi: 11,
+            end: 9,
+            int: 8,
+            per: 8,
+            cha: 8
+        };
+
+        function updateAttribute(attr, value) {
+            value = parseInt(value);
+            attributes[attr] = value;
+            
+            // Update display
+            document.getElementById(attr + 'Value').textContent = value;
+            
+            // Update slider fill
+            const fillPercent = ((value - 6) / (16 - 6)) * 100;
+            document.getElementById(attr + 'Track').style.width = fillPercent + '%';
+            
+            // Calculate points used
+            const pointsUsed = Object.values(attributes).reduce((sum, val) => sum + val, 0) - (baseValue * 6);
+            const pointsRemaining = totalPoints - pointsUsed;
+            
+            document.getElementById('pointsRemaining').textContent = pointsRemaining;
+            
+            // Update derived stats
+            updateDerivedStats();
+            
+            // Show/hide warning
+            if (pointsRemaining !== 0) {
+                document.getElementById('warning').style.display = 'inline';
+            } else {
+                document.getElementById('warning').style.display = 'none';
+            }
+        }
+
+        function updateDerivedStats() {
+            // Max Health = 50 + (END × 10)
+            const health = 50 + (attributes.end * 10);
+            document.getElementById('maxHealth').textContent = health;
+            
+            // Max Stamina = 40 + (END × 8) + (AGI × 3)
+            const stamina = 40 + (attributes.end * 8) + (attributes.agi * 3);
+            document.getElementById('maxStamina').textContent = stamina;
+            
+            // Carry Weight = 50 + (STR × 6)
+            const weight = 50 + (attributes.str * 6);
+            document.getElementById('carryWeight').textContent = weight + ' kg';
+            
+            // Initiative = AGI / 3
+            const init = Math.floor(attributes.agi / 3);
+            document.getElementById('initiative').textContent = '+' + init;
+            
+            // Crit Chance = 5% + (PER / 4)
+            const crit = 5 + Math.floor(attributes.per / 4);
+            document.getElementById('critChance').textContent = crit + '%';
+        }
+
+        function continueNext() {
+            const pointsUsed = Object.values(attributes).reduce((sum, val) => sum + val, 0) - (baseValue * 6);
+            const pointsRemaining = totalPoints - pointsUsed;
+            
+            if (pointsRemaining !== 0) {
+                alert('Please allocate all ' + totalPoints + ' points before continuing.');
+                return;
+            }
+            
+            alert('Proceeding to Skill Selection');
+        }
+
+        // Initialize
+        updateDerivedStats();
+    </script>
+</body>
+</html>

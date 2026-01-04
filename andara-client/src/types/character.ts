@@ -4,6 +4,9 @@ export enum Origin {
   VAULT_DWELLER = 'VAULT_DWELLER',
   WASTELANDER = 'WASTELANDER',
   RIFT_TOUCHED = 'RIFT_TOUCHED',
+  CARAVAN_GUARD = 'CARAVAN_GUARD',
+  SETTLEMENT_MILITIA = 'SETTLEMENT_MILITIA',
+  OUTCAST = 'OUTCAST',
 }
 
 export interface Attributes {
@@ -23,14 +26,62 @@ export enum Gender {
 }
 
 export enum BodyType {
-  SLENDER = 'SLENDER',
-  AVERAGE = 'AVERAGE',
-  STOCKY = 'STOCKY',
+  MASCULINE = 'MASCULINE',
+  FEMININE = 'FEMININE',
+  NEUTRAL = 'NEUTRAL',
+}
+
+export enum HairStyle {
+  BALD = 'BALD',
+  SHORT = 'SHORT',
+  MEDIUM = 'MEDIUM',
+  LONG = 'LONG',
+  MOHAWK = 'MOHAWK',
+  BRAIDED = 'BRAIDED',
+}
+
+export enum HairColor {
+  BLACK = 'BLACK',
+  BROWN = 'BROWN',
+  BLONDE = 'BLONDE',
+  RED = 'RED',
+  WHITE = 'WHITE',
+  BLUE = 'BLUE',
+}
+
+export enum SkinTone {
+  PALE = 'PALE',
+  FAIR = 'FAIR',
+  MEDIUM = 'MEDIUM',
+  TAN = 'TAN',
+  BROWN = 'BROWN',
+  DARK = 'DARK',
+}
+
+export enum EyeColor {
+  BROWN = 'BROWN',
+  BLUE = 'BLUE',
+  GREEN = 'GREEN',
+  HAZEL = 'HAZEL',
+  GRAY = 'GRAY',
+  AMBER = 'AMBER',
+}
+
+export enum ScarsMarks {
+  NONE = 'NONE',
+  WEATHERED = 'WEATHERED',
+  BATTLE_WORN = 'BATTLE_WORN',
+  RIFT_MARKED = 'RIFT_MARKED',
 }
 
 export interface Appearance {
-  gender: Gender;
   bodyType: BodyType;
+  hairStyle: HairStyle;
+  hairColor: HairColor;
+  skinTone: SkinTone;
+  eyeColor: EyeColor;
+  ageAppearance: number; // 18-70
+  scarsMarks: ScarsMarks;
 }
 
 export interface Skill {
@@ -40,10 +91,23 @@ export interface Skill {
   description: string;
 }
 
+export interface OriginStat {
+  label: string;
+  value: string;
+  type?: 'positive' | 'negative' | 'neutral';
+}
+
 export interface OriginDefinition {
   id: string;
   displayName: string;
   description: string;
+  icon?: string;
+  bonuses?: string[];
+  penalties?: string[];
+  startingGear?: string;
+  factionRelationships?: Record<string, number>;
+  specialAbilities?: string[];
+  stats?: OriginStat[];
 }
 
 export interface CreateCharacterRequest {

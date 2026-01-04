@@ -1,0 +1,53 @@
+@import './ui-components.css';
+
+.andara-button {
+  padding: 12px 24px;
+  border: 1px solid var(--color-ash);
+  background: linear-gradient(135deg, var(--color-steel) 0%, var(--color-concrete) 100%);
+  color: var(--color-bleached);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.andara-button:hover:not(.andara-button--disabled) {
+  border-color: var(--color-rift-stable);
+  box-shadow: 0 0 12px rgba(77, 166, 255, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.andara-button:active:not(.andara-button--disabled) {
+  background: linear-gradient(135deg, var(--color-concrete) 0%, var(--color-void) 100%);
+  transform: scale(0.98);
+}
+
+.andara-button--primary {
+  border-color: var(--color-rift-stable);
+  background: var(--color-rift-stable);
+  color: var(--color-void);
+  font-weight: 600;
+}
+
+.andara-button--primary:hover:not(.andara-button--disabled) {
+  background: var(--color-rift-active);
+  box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
+}
+
+.andara-button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--color-rust);
+  background: var(--color-concrete);
+}
+
+.andara-button--disabled:hover {
+  box-shadow: none;
+  border-color: var(--color-rust);
+}
+

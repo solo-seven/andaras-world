@@ -54,3 +54,4 @@ Ensure Kafka is running (via Docker Compose):
 docker-compose up -d kafka zookeeper
 ```
 
+

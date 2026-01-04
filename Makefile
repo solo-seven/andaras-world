@@ -1,4 +1,4 @@
-.PHONY: test test-backend test-frontend build build-backend build-frontend all clean help
+.PHONY: test test-backend test-frontend build build-backend build-frontend all clean help storybook run-backend run-frontend
 
 # Default target
 all: test build
@@ -28,7 +28,7 @@ test-frontend:
 	@cd andara-client && \
 		if [ ! -d node_modules ]; then \
 			echo "Installing dependencies..."; \
-			npm install; \
+			npm install --legacy-peer-deps; \
 		fi && \
 		npm test -- --run
 	@echo "✓ Frontend tests passed"
@@ -54,6 +54,38 @@ clean:
 	@cd andara-client && rm -rf dist node_modules/.vite || true
 	@echo "✓ Clean completed"
 
+# Development targets
+storybook:
+	@echo "Starting Storybook server..."
+	@cd andara-client && \
+		if [ ! -d node_modules ]; then \
+			echo "Installing dependencies..."; \
+			npm install --legacy-peer-deps; \
+		fi && \
+		npm run storybook
+
+run-backend:
+	@echo "Ensuring Docker network exists..."
+	@docker network inspect andara-network >/dev/null 2>&1 || \
+		docker network create --driver bridge andara-network
+	@echo "Starting backend container (will be removed on stop)..."
+	@docker run --rm -it \
+		--name andara-server \
+		-p 8080:8080 \
+		--network andara-network \
+		andara-server:latest
+
+run-frontend:
+	@echo "Ensuring Docker network exists..."
+	@docker network inspect andara-network >/dev/null 2>&1 || \
+		docker network create --driver bridge andara-network
+	@echo "Starting frontend container (will be removed on stop)..."
+	@docker run --rm -it \
+		--name andara-client \
+		-p 3000:80 \
+		--network andara-network \
+		andara-client:latest
+
 # Help target
 help:
 	@echo "Available targets:"
@@ -65,5 +97,8 @@ help:
 	@echo "  make build-backend - Build backend Docker image"
 	@echo "  make build-frontend- Build frontend Docker image"
 	@echo "  make clean         - Clean build artifacts"
+	@echo "  make storybook     - Start Storybook development server"
+	@echo "  make run-backend   - Run backend Docker container in foreground (removed on stop)"
+	@echo "  make run-frontend  - Run frontend Docker container in foreground (removed on stop)"
 	@echo "  make help          - Show this help message"
 

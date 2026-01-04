@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
   setStep,
@@ -6,139 +6,215 @@ import {
   setValidationErrors,
 } from '../../store/slices/characterCreationSlice';
 import type { Attributes } from '../../types/character';
+import { Button } from '../ui/Button';
+import { Stepper, StepperStep } from '../ui/Stepper';
+import { AttributeSlider } from '../ui/AttributeSlider';
+import { DerivedStatsPanel } from '../ui/DerivedStatsPanel';
+import { TipsPanel } from '../ui/TipsPanel';
+import { PointsRemaining } from '../ui/PointsRemaining';
+import './AttributeDistributionStep.css';
 
 const MIN_ATTRIBUTE = 6;
 const MAX_ATTRIBUTE = 16;
 const BASE_ATTRIBUTE = 8;
 const POINTS_TO_DISTRIBUTE = 27;
 
+const CHARACTER_CREATION_STEPS: StepperStep[] = [
+  { id: 'origin', label: 'Origin' },
+  { id: 'attributes', label: 'Attributes' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'appearance', label: 'Appearance' },
+  { id: 'name', label: 'Identity' },
+];
+
+const ATTRIBUTE_CONFIG = [
+  {
+    key: 'strength' as keyof Attributes,
+    name: 'Strength',
+    abbreviation: 'STR',
+    description: 'Melee damage, carry capacity, physical checks',
+  },
+  {
+    key: 'agility' as keyof Attributes,
+    name: 'Agility',
+    abbreviation: 'AGI',
+    description: 'Initiative, ranged accuracy, evasion, movement',
+  },
+  {
+    key: 'endurance' as keyof Attributes,
+    name: 'Endurance',
+    abbreviation: 'END',
+    description: 'Health pool, stamina, resistance to injury/toxins',
+  },
+  {
+    key: 'intellect' as keyof Attributes,
+    name: 'Intellect',
+    abbreviation: 'INT',
+    description: 'Tech skills, crafting quality, ability cooldowns',
+  },
+  {
+    key: 'perception' as keyof Attributes,
+    name: 'Perception',
+    abbreviation: 'PER',
+    description: 'Detection, ranged accuracy, critical chance, arcane sensitivity',
+  },
+  {
+    key: 'charisma' as keyof Attributes,
+    name: 'Charisma',
+    abbreviation: 'CHA',
+    description: 'Barter prices, companion morale, faction standing gains',
+  },
+];
+
 export const AttributeDistributionStep: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { formData, validationErrors } = useAppSelector(
+  const { formData, validationErrors, currentStep } = useAppSelector(
     (state) => state.characterCreation
   );
 
-  const [attributes, setAttributes] = useState<Attributes>(
-    formData.attributes || {
-      strength: BASE_ATTRIBUTE,
-      agility: BASE_ATTRIBUTE,
-      endurance: BASE_ATTRIBUTE,
-      intellect: BASE_ATTRIBUTE,
-      perception: BASE_ATTRIBUTE,
-      charisma: BASE_ATTRIBUTE,
-    }
-  );
+  const initialAttributes: Attributes = formData.attributes || {
+    strength: BASE_ATTRIBUTE,
+    agility: BASE_ATTRIBUTE,
+    endurance: BASE_ATTRIBUTE,
+    intellect: BASE_ATTRIBUTE,
+    perception: BASE_ATTRIBUTE,
+    charisma: BASE_ATTRIBUTE,
+  };
 
-  const [pointsRemaining, setPointsRemaining] = useState(POINTS_TO_DISTRIBUTE);
+  const [attributes, setAttributes] = useState<Attributes>(initialAttributes);
 
+  // Sync local state with Redux store when formData.attributes changes
+  // This handles the case when user navigates back to this step
   useEffect(() => {
-    // Point-buy calculation: sum of (attr - BASE_ATTRIBUTE) for all attributes
-    // This can be negative if attributes are reduced below 8 (gives points back)
+    if (formData.attributes) {
+      setAttributes(formData.attributes);
+    } else {
+      // Reset to base values if no attributes are saved
+      setAttributes({
+        strength: BASE_ATTRIBUTE,
+        agility: BASE_ATTRIBUTE,
+        endurance: BASE_ATTRIBUTE,
+        intellect: BASE_ATTRIBUTE,
+        perception: BASE_ATTRIBUTE,
+        charisma: BASE_ATTRIBUTE,
+      });
+    }
+  }, [formData.attributes]);
+
+  // Calculate points remaining
+  const pointsRemaining = useMemo(() => {
     const pointsUsed = Object.values(attributes).reduce(
       (sum, val) => sum + (val - BASE_ATTRIBUTE),
       0
     );
-    setPointsRemaining(POINTS_TO_DISTRIBUTE - pointsUsed);
+    return POINTS_TO_DISTRIBUTE - pointsUsed;
   }, [attributes]);
 
-  const updateAttribute = (
-    attr: keyof Attributes,
-    delta: number
-  ) => {
-    const current = attributes[attr];
-    const newValue = Math.max(
-      MIN_ATTRIBUTE,
-      Math.min(MAX_ATTRIBUTE, current + delta)
-    );
-    setAttributes({ ...attributes, [attr]: newValue });
+  const handleAttributeChange = (key: keyof Attributes, value: number) => {
+    setAttributes((prev) => ({ ...prev, [key]: value }));
+    // Clear validation errors when user makes changes
+    if (validationErrors.attributes) {
+      dispatch(setValidationErrors({}));
+    }
   };
 
   const handleNext = () => {
-    // Point-buy calculation: sum of (attr - BASE_ATTRIBUTE) for all attributes
-    // Negative values mean attributes were reduced below 8 (points recovered)
-    // Positive values mean attributes were increased above 8 (points spent)
-    const pointsUsed = Object.values(attributes).reduce(
-      (sum, val) => sum + (val - BASE_ATTRIBUTE),
-      0
-    );
-
-    // Validate: points used cannot exceed available points to distribute
-    // Can be negative (attributes reduced below base), but capped at reasonable limit
-    // Minimum: all 6s = -12 points (6*6 - 8*6), Maximum: all 16s = +48 points (16*6 - 8*6)
-    // But we only have 27 points to distribute, so max is +27
-    if (pointsUsed > POINTS_TO_DISTRIBUTE) {
+    // Validate: points must be fully allocated
+    if (pointsRemaining !== 0) {
       dispatch(
         setValidationErrors({
-          attributes: `You have used ${pointsUsed} points, but only ${POINTS_TO_DISTRIBUTE} are available`,
+          attributes: `You must spend all ${POINTS_TO_DISTRIBUTE} points before continuing.`,
         })
       );
       return;
     }
 
+    // At this point, pointsRemaining === 0 guarantees pointsUsed === POINTS_TO_DISTRIBUTE
+    // No need for additional validation as it's mathematically impossible for pointsUsed > POINTS_TO_DISTRIBUTE
+
     dispatch(updateFormData({ attributes }));
     dispatch(setStep('skills'));
   };
 
-  const attributeLabels: Record<keyof Attributes, string> = {
-    strength: 'Strength',
-    agility: 'Agility',
-    endurance: 'Endurance',
-    intellect: 'Intellect',
-    perception: 'Perception',
-    charisma: 'Charisma',
+  const handleBack = () => {
+    dispatch(setStep('origin'));
   };
 
   return (
-    <div className="attribute-distribution-step">
-      <h2>Distribute Attributes</h2>
-      <p>
-        You have {POINTS_TO_DISTRIBUTE} points to distribute. Each attribute
-        must be between {MIN_ATTRIBUTE} and {MAX_ATTRIBUTE}.
-      </p>
+    <div className="andara-attribute-distribution-step">
+      <header className="andara-attribute-distribution-step__header">
+        <div className="andara-attribute-distribution-step__logo">
+          ANDARA&apos;S WORLD
+        </div>
+        <Stepper steps={CHARACTER_CREATION_STEPS} currentStep={currentStep} />
+      </header>
 
-      <div className="points-remaining">
-        Points Remaining: <strong>{pointsRemaining}</strong>
-        {pointsRemaining < 0 && (
-          <span className="points-warning">
-            {' '}(You have {Math.abs(pointsRemaining)} extra points from reducing attributes below 8)
+      <main className="andara-attribute-distribution-step__main">
+        <h1 className="andara-attribute-distribution-step__title">
+          Distribute Attributes
+        </h1>
+        <p className="andara-attribute-distribution-step__subtitle">
+          You have <strong>{POINTS_TO_DISTRIBUTE} points</strong> to distribute
+          among six core attributes. Each attribute starts at {BASE_ATTRIBUTE}.
+          The range is {MIN_ATTRIBUTE}–{MAX_ATTRIBUTE} per attribute. Attributes
+          affect combat effectiveness, carry capacity, skill checks, and more.
+        </p>
+
+        {validationErrors.attributes && (
+          <div className="andara-attribute-distribution-step__error">
+            {validationErrors.attributes}
+          </div>
+        )}
+
+        <div className="andara-attribute-distribution-step__content-grid">
+          {/* Attributes Panel */}
+          <div className="andara-attribute-distribution-step__attributes-panel">
+            <div className="andara-attribute-distribution-step__panel-header">
+              <div className="andara-attribute-distribution-step__panel-title">
+                Core Attributes
+              </div>
+              <PointsRemaining points={pointsRemaining} />
+            </div>
+
+            {ATTRIBUTE_CONFIG.map((config) => (
+              <AttributeSlider
+                key={config.key}
+                name={config.name}
+                abbreviation={config.abbreviation}
+                value={attributes[config.key]}
+                description={config.description}
+                min={MIN_ATTRIBUTE}
+                max={MAX_ATTRIBUTE}
+                onChange={(value) => handleAttributeChange(config.key, value)}
+              />
+            ))}
+          </div>
+
+          {/* Info Panel */}
+          <div className="andara-attribute-distribution-step__info-panel">
+            <DerivedStatsPanel attributes={attributes} />
+            <TipsPanel />
+          </div>
+        </div>
+      </main>
+
+      <footer className="andara-attribute-distribution-step__actions">
+        <Button variant="secondary" onClick={handleBack}>
+          ← Back
+        </Button>
+        {pointsRemaining !== 0 && (
+          <span className="andara-attribute-distribution-step__warning">
+            You must spend all points
           </span>
         )}
-      </div>
-
-      {validationErrors.attributes && (
-        <div className="error">{validationErrors.attributes}</div>
-      )}
-
-      <div className="attribute-list">
-        {(Object.keys(attributes) as Array<keyof Attributes>).map((attr) => (
-          <div key={attr} className="attribute-row">
-            <label>{attributeLabels[attr]}</label>
-            <div className="attribute-controls">
-              <button
-                onClick={() => updateAttribute(attr, -1)}
-                disabled={attributes[attr] <= MIN_ATTRIBUTE}
-              >
-                -
-              </button>
-              <span className="attribute-value">{attributes[attr]}</span>
-              <button
-                onClick={() => updateAttribute(attr, 1)}
-                disabled={
-                  attributes[attr] >= MAX_ATTRIBUTE || pointsRemaining <= 0
-                }
-              >
-                +
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="step-actions">
-        <button onClick={() => dispatch(setStep('origin'))}>Back</button>
-        <button onClick={handleNext}>Next: Skills</button>
-      </div>
+        <Button
+          variant="primary"
+          onClick={handleNext}
+          disabled={pointsRemaining !== 0}
+        >
+          Continue →
+        </Button>
+      </footer>
     </div>
   );
 };
-

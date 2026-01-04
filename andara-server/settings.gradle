@@ -16,3 +16,4 @@ project(':andara-query').projectDir = file('andara-query')
 project(':andara-common').projectDir = file('andara-common')
 project(':andara-server-app').projectDir = file('andara-server-app')
 
+

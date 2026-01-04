@@ -30,3 +30,4 @@ CREATE TABLE aggregate_snapshots (
     PRIMARY KEY (aggregate_id, aggregate_type)
 );
 
+

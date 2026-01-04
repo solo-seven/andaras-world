@@ -103,10 +103,25 @@ export const ReviewStep: React.FC = () => {
         <div className="review-section">
           <h3>Appearance</h3>
           <p>
-            <strong>Gender:</strong> {formData.appearance.gender.replace('_', ' ')}
+            <strong>Body Type:</strong> {formData.appearance.bodyType.replace('_', '-')}
           </p>
           <p>
-            <strong>Body Type:</strong> {formData.appearance.bodyType}
+            <strong>Hair Style:</strong> {formData.appearance.hairStyle.replace('_', '-')}
+          </p>
+          <p>
+            <strong>Hair Color:</strong> {formData.appearance.hairColor}
+          </p>
+          <p>
+            <strong>Skin Tone:</strong> {formData.appearance.skinTone}
+          </p>
+          <p>
+            <strong>Eye Color:</strong> {formData.appearance.eyeColor}
+          </p>
+          <p>
+            <strong>Age Appearance:</strong> {formData.appearance.ageAppearance}
+          </p>
+          <p>
+            <strong>Scars & Marks:</strong> {formData.appearance.scarsMarks.replace('_', '-')}
           </p>
         </div>
       )}

@@ -1,0 +1,20 @@
+@import './ui-components.css';
+
+.andara-points-remaining {
+  font-size: 14px;
+  color: var(--color-rift-temporal);
+  font-weight: 600;
+  font-family: var(--font-primary);
+}
+
+.andara-points-remaining__number {
+  font-size: 24px;
+  font-family: var(--font-display);
+}
+
+.andara-points-remaining__label {
+  font-size: 14px;
+  font-family: var(--font-primary);
+}
+
+

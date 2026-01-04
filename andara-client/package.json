@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -33,7 +36,7 @@
     "prettier": "^3.1.1",
     "typescript": "^5.2.2",
     "vite": "^7.3.0",
-    "vitest": "^1.0.4",
+    "vitest": "^4.0.0",
     "@testing-library/react": "^14.1.2",
     "@testing-library/jest-dom": "^6.1.5",
     "jsdom": "^23.0.1",
@@ -46,7 +49,7 @@
     "@storybook/addon-onboarding": "^10.1.11",
     "eslint-plugin-storybook": "^10.1.11",
     "playwright": "^1.57.0",
-    "@vitest/browser": "^1.0.4",
-    "@vitest/coverage-v8": "^1.0.4"
+    "@vitest/browser": "^4.0.0",
+    "@vitest/coverage-v8": "^4.0.0"
   }
 }

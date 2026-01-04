@@ -1,0 +1,15 @@
+@import './ui-components.css';
+
+.andara-selection-summary {
+  background: var(--color-steel);
+  border: 1px solid var(--color-rust);
+  padding: var(--space-m);
+  font-size: 12px;
+  color: var(--color-smoke);
+  font-family: var(--font-primary);
+}
+
+.andara-selection-summary strong {
+  color: var(--color-rift-stable);
+}
+

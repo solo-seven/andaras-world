@@ -19,3 +19,4 @@ public interface DomainEvent {
     Map<String, String> getMetadata();
 }
 
+

@@ -1,0 +1,66 @@
+@import './ui-components.css';
+
+.andara-stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.andara-stepper__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.andara-stepper__indicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid var(--color-ash);
+  background: var(--color-concrete);
+  color: var(--color-ash);
+  transition: all 0.3s ease;
+  font-family: var(--font-primary);
+}
+
+.andara-stepper__step--active .andara-stepper__indicator {
+  border-color: var(--color-rift-stable);
+  background: var(--color-rift-stable);
+  color: var(--color-void);
+  box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
+}
+
+.andara-stepper__step--completed .andara-stepper__indicator {
+  border-color: var(--color-rift-healing);
+  background: var(--color-rift-healing);
+  color: var(--color-void);
+}
+
+.andara-stepper__label {
+  font-size: 12px;
+  color: var(--color-smoke);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-primary);
+}
+
+.andara-stepper__step--active .andara-stepper__label {
+  color: var(--color-bleached);
+}
+
+.andara-stepper__connector {
+  width: 48px;
+  height: 2px;
+  background: var(--color-rust);
+  position: relative;
+}
+
+.andara-stepper__connector--completed {
+  background: var(--color-rift-healing);
+}
+

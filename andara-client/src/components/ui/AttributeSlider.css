@@ -1,0 +1,125 @@
+@import './ui-components.css';
+
+.andara-attribute-slider {
+  margin-bottom: var(--space-l);
+}
+
+.andara-attribute-slider__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-s);
+}
+
+.andara-attribute-slider__name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-bleached);
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font-family: var(--font-primary);
+}
+
+.andara-attribute-slider__abbr {
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--color-rift-stable);
+  opacity: 0.7;
+}
+
+.andara-attribute-slider__value {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-rift-stable);
+  text-shadow: 0 0 8px rgba(77, 166, 255, 0.3);
+  min-width: 48px;
+  text-align: right;
+}
+
+.andara-attribute-slider__description {
+  font-size: 11px;
+  color: var(--color-dust);
+  margin-bottom: var(--space-s);
+  line-height: 1.4;
+  font-family: var(--font-primary);
+}
+
+.andara-attribute-slider__container {
+  position: relative;
+  margin-bottom: var(--space-s);
+}
+
+.andara-attribute-slider__track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 8px;
+  background: linear-gradient(90deg, var(--color-rift-stable), var(--color-rift-active));
+  border-radius: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 4px rgba(77, 166, 255, 0.3);
+  transition: width 0.1s ease;
+}
+
+.andara-attribute-slider__input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: var(--color-void);
+  border: 1px solid var(--color-rust);
+  outline: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.andara-attribute-slider__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--color-rift-stable);
+  border: 2px solid var(--color-rift-active);
+  transform: rotate(45deg);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+  transition: all 0.1s ease;
+  border-radius: 0;
+}
+
+.andara-attribute-slider__input::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 20px rgba(77, 166, 255, 0.8);
+  transform: rotate(45deg) scale(1.1);
+}
+
+.andara-attribute-slider__input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--color-rift-stable);
+  border: 2px solid var(--color-rift-active);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+  border-radius: 0;
+  transition: all 0.1s ease;
+  /* Note: Firefox doesn't support transform on range thumb, so we use a different approach */
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  transform: rotate(45deg);
+}
+
+.andara-attribute-slider__input::-moz-range-thumb:hover {
+  box-shadow: 0 0 20px rgba(77, 166, 255, 0.8);
+  transform: rotate(45deg) scale(1.1);
+}
+
+.andara-attribute-slider__notches {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--color-ash);
+  margin-top: var(--space-xs);
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-primary);
+}
+

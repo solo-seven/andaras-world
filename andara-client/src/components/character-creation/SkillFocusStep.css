@@ -1,0 +1,383 @@
+@import '../ui/ui-components.css';
+
+:root {
+  --color-combat: #ff6b6b;
+  --color-survival: #4dffb8;
+  --color-technical: #4da6ff;
+  --color-arcane: #d946ff;
+  --color-social: #ffdb4d;
+}
+
+.andara-skill-focus-step {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--space-xxl);
+  min-height: 100vh;
+  background-color: var(--color-void);
+  color: var(--color-bleached);
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(77, 166, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(217, 70, 255, 0.02) 0%, transparent 50%);
+  font-family: var(--font-primary);
+}
+
+.andara-skill-focus-step__header {
+  margin-bottom: var(--space-xxl);
+}
+
+.andara-skill-focus-step__logo {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-rift-stable);
+  text-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+  margin-bottom: var(--space-l);
+}
+
+.andara-skill-focus-step__main {
+  margin-bottom: var(--space-xxl);
+}
+
+.andara-skill-focus-step__title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: var(--space-m);
+  color: var(--color-bleached);
+  margin-top: 0;
+}
+
+.andara-skill-focus-step__subtitle {
+  font-size: 14px;
+  color: var(--color-smoke);
+  margin-bottom: var(--space-xl);
+  line-height: 1.6;
+  max-width: 800px;
+  margin-top: 0;
+}
+
+.andara-skill-focus-step__subtitle strong {
+  color: var(--color-bleached);
+  font-weight: 600;
+}
+
+.andara-skill-focus-step__error {
+  background: var(--color-rift-volatile);
+  color: var(--color-void);
+  padding: var(--space-m);
+  margin-bottom: var(--space-l);
+  border: 1px solid var(--color-rift-volatile);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Selection Summary */
+.andara-skill-focus-step__selection-header {
+  background: var(--color-steel);
+  border: 1px solid var(--color-rust);
+  padding: var(--space-m);
+  margin-bottom: var(--space-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-m);
+}
+
+.andara-skill-focus-step__selection-count {
+  font-size: 14px;
+  color: var(--color-smoke);
+}
+
+.andara-skill-focus-step__selection-number {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--color-rift-temporal);
+  font-weight: 700;
+}
+
+.andara-skill-focus-step__selected-skills {
+  display: flex;
+  gap: var(--space-m);
+  flex-wrap: wrap;
+}
+
+.andara-skill-focus-step__selected-skill-tag {
+  padding: var(--space-s) var(--space-m);
+  background: var(--color-concrete);
+  border: 1px solid;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-bleached);
+}
+
+/* Skill Categories */
+.andara-skill-focus-step__category {
+  margin-bottom: var(--space-xxl);
+}
+
+.andara-skill-focus-step__category-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+  margin-bottom: var(--space-l);
+  padding-bottom: var(--space-m);
+  border-bottom: 2px solid;
+}
+
+.andara-skill-focus-step__category-icon {
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  background: var(--color-concrete);
+  border-radius: 2px;
+}
+
+.andara-skill-focus-step__category-info {
+  flex: 1;
+}
+
+.andara-skill-focus-step__category-name {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.andara-skill-focus-step__category-description {
+  font-size: 12px;
+  color: var(--color-smoke);
+  margin-top: var(--space-xs);
+}
+
+/* Category-specific colors */
+.andara-skill-focus-step__category--combat .andara-skill-focus-step__category-header {
+  border-color: var(--color-combat);
+}
+.andara-skill-focus-step__category--combat .andara-skill-focus-step__category-icon {
+  border-color: var(--color-combat);
+  color: var(--color-combat);
+}
+.andara-skill-focus-step__category--combat .andara-skill-focus-step__category-name {
+  color: var(--color-combat);
+}
+
+.andara-skill-focus-step__category--survival .andara-skill-focus-step__category-header {
+  border-color: var(--color-survival);
+}
+.andara-skill-focus-step__category--survival .andara-skill-focus-step__category-icon {
+  border-color: var(--color-survival);
+  color: var(--color-survival);
+}
+.andara-skill-focus-step__category--survival .andara-skill-focus-step__category-name {
+  color: var(--color-survival);
+}
+
+.andara-skill-focus-step__category--technical .andara-skill-focus-step__category-header {
+  border-color: var(--color-technical);
+}
+.andara-skill-focus-step__category--technical .andara-skill-focus-step__category-icon {
+  border-color: var(--color-technical);
+  color: var(--color-technical);
+}
+.andara-skill-focus-step__category--technical .andara-skill-focus-step__category-name {
+  color: var(--color-technical);
+}
+
+.andara-skill-focus-step__category--arcane .andara-skill-focus-step__category-header {
+  border-color: var(--color-arcane);
+}
+.andara-skill-focus-step__category--arcane .andara-skill-focus-step__category-icon {
+  border-color: var(--color-arcane);
+  color: var(--color-arcane);
+}
+.andara-skill-focus-step__category--arcane .andara-skill-focus-step__category-name {
+  color: var(--color-arcane);
+}
+
+.andara-skill-focus-step__category--social .andara-skill-focus-step__category-header {
+  border-color: var(--color-social);
+}
+.andara-skill-focus-step__category--social .andara-skill-focus-step__category-icon {
+  border-color: var(--color-social);
+  color: var(--color-social);
+}
+.andara-skill-focus-step__category--social .andara-skill-focus-step__category-name {
+  color: var(--color-social);
+}
+
+/* Skill Grid */
+.andara-skill-focus-step__skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-m);
+}
+
+/* Skill Card */
+.andara-skill-focus-step__skill-card {
+  background: var(--color-concrete);
+  border: 1px solid var(--color-rust);
+  padding: var(--space-m);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.andara-skill-focus-step__skill-card:hover:not(.andara-skill-focus-step__skill-card--disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.andara-skill-focus-step__skill-card--selected {
+  border-width: 2px;
+}
+
+.andara-skill-focus-step__skill-card--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Selected state colors by category */
+.andara-skill-focus-step__skill-card--combat.andara-skill-focus-step__skill-card--selected {
+  border-color: var(--color-combat);
+  background: rgba(255, 107, 107, 0.05);
+  box-shadow: 0 0 16px rgba(255, 107, 107, 0.2);
+}
+
+.andara-skill-focus-step__skill-card--survival.andara-skill-focus-step__skill-card--selected {
+  border-color: var(--color-survival);
+  background: rgba(77, 255, 184, 0.05);
+  box-shadow: 0 0 16px rgba(77, 255, 184, 0.2);
+}
+
+.andara-skill-focus-step__skill-card--technical.andara-skill-focus-step__skill-card--selected {
+  border-color: var(--color-technical);
+  background: rgba(77, 166, 255, 0.05);
+  box-shadow: 0 0 16px rgba(77, 166, 255, 0.2);
+}
+
+.andara-skill-focus-step__skill-card--arcane.andara-skill-focus-step__skill-card--selected {
+  border-color: var(--color-arcane);
+  background: rgba(217, 70, 255, 0.05);
+  box-shadow: 0 0 16px rgba(217, 70, 255, 0.2);
+}
+
+.andara-skill-focus-step__skill-card--social.andara-skill-focus-step__skill-card--selected {
+  border-color: var(--color-social);
+  background: rgba(255, 219, 77, 0.05);
+  box-shadow: 0 0 16px rgba(255, 219, 77, 0.2);
+}
+
+.andara-skill-focus-step__skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-s);
+}
+
+.andara-skill-focus-step__skill-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-bleached);
+}
+
+.andara-skill-focus-step__skill-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.andara-skill-focus-step__skill-badge--origin {
+  background: var(--color-rift-healing);
+  color: var(--color-void);
+}
+
+.andara-skill-focus-step__skill-description {
+  font-size: 12px;
+  color: var(--color-smoke);
+  line-height: 1.5;
+  margin-bottom: var(--space-m);
+}
+
+.andara-skill-focus-step__skill-proficiency {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--color-dust);
+}
+
+.andara-skill-focus-step__proficiency-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.andara-skill-focus-step__proficiency-value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.andara-skill-focus-step__skill-card--selected .andara-skill-focus-step__proficiency-value--combat {
+  color: var(--color-combat);
+}
+
+.andara-skill-focus-step__skill-card--selected .andara-skill-focus-step__proficiency-value--survival {
+  color: var(--color-survival);
+}
+
+.andara-skill-focus-step__skill-card--selected .andara-skill-focus-step__proficiency-value--technical {
+  color: var(--color-technical);
+}
+
+.andara-skill-focus-step__skill-card--selected .andara-skill-focus-step__proficiency-value--arcane {
+  color: var(--color-arcane);
+}
+
+.andara-skill-focus-step__skill-card--selected .andara-skill-focus-step__proficiency-value--social {
+  color: var(--color-social);
+}
+
+/* Actions */
+.andara-skill-focus-step__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-l);
+  border-top: 1px solid var(--color-rust);
+  margin-top: var(--space-xxl);
+  gap: var(--space-m);
+}
+
+.andara-skill-focus-step__warning {
+  font-size: 12px;
+  color: var(--color-rift-volatile);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .andara-skill-focus-step {
+    padding: var(--space-l);
+  }
+
+  .andara-skill-focus-step__skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .andara-skill-focus-step__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .andara-skill-focus-step__selection-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

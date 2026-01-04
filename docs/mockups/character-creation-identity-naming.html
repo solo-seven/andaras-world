@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andara's World - Identity</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-void: #0a0e14;
+            --color-concrete: #1a1f28;
+            --color-steel: #2d3542;
+            --color-rust: #3d4451;
+            --color-ash: #555d6d;
+            --color-dust: #7a8291;
+            --color-smoke: #9ba3b4;
+            --color-paper: #c5cdd8;
+            --color-bleached: #e3e8ef;
+            
+            --color-rift-stable: #4da6ff;
+            --color-rift-active: #80c0ff;
+            --color-rift-volatile: #ff6b6b;
+            --color-rift-healing: #4dffb8;
+            --color-rift-temporal: #ffdb4d;
+            
+            --space-xs: 4px;
+            --space-s: 8px;
+            --space-m: 16px;
+            --space-l: 24px;
+            --space-xl: 32px;
+            --space-xxl: 48px;
+            
+            --font-primary: 'IBM Plex Mono', monospace;
+            --font-display: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--color-void);
+            color: var(--color-bleached);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(77, 166, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(217, 70, 255, 0.02) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: var(--space-xxl);
+        }
+
+        .header {
+            margin-bottom: var(--space-xxl);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-rift-stable);
+            text-shadow: 0 0 12px rgba(77, 166, 255, 0.5);
+            margin-bottom: var(--space-l);
+        }
+
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-s);
+            margin-bottom: var(--space-xxl);
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: var(--space-s);
+        }
+
+        .step-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid var(--color-ash);
+            background: var(--color-concrete);
+            color: var(--color-ash);
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-indicator {
+            border-color: var(--color-rift-stable);
+            background: var(--color-rift-stable);
+            color: var(--color-void);
+            box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
+        }
+
+        .step.completed .step-indicator {
+            border-color: var(--color-rift-healing);
+            background: var(--color-rift-healing);
+            color: var(--color-void);
+        }
+
+        .step.completed .step-indicator::after {
+            content: '✓';
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: var(--color-smoke);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .step.active .step-label {
+            color: var(--color-bleached);
+        }
+
+        .step-connector {
+            width: 48px;
+            height: 2px;
+            background: var(--color-rust);
+        }
+
+        .step.completed + .step-connector {
+            background: var(--color-rift-healing);
+        }
+
+        .screen-title {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: var(--space-m);
+        }
+
+        .screen-subtitle {
+            font-size: 14px;
+            color: var(--color-smoke);
+            margin-bottom: var(--space-xxl);
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        /* Main Content */
+        .identity-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xxl);
+        }
+
+        .form-panel {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-l);
+        }
+
+        .form-group {
+            background: var(--color-concrete);
+            border: 1px solid var(--color-rust);
+            padding: var(--space-l);
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-bleached);
+            margin-bottom: var(--space-m);
+            display: block;
+        }
+
+        .form-help {
+            font-size: 11px;
+            color: var(--color-dust);
+            margin-bottom: var(--space-m);
+            line-height: 1.5;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            background: var(--color-void);
+            border: 1px solid var(--color-rust);
+            color: var(--color-bleached);
+            font-family: var(--font-primary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--color-rift-stable);
+            box-shadow: 0 0 12px rgba(77, 166, 255, 0.3);
+        }
+
+        .input-field::placeholder {
+            color: var(--color-ash);
+        }
+
+        .textarea-field {
+            min-height: 120px;
+            resize: vertical;
+            font-family: var(--font-primary);
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 11px;
+            color: var(--color-dust);
+            margin-top: var(--space-s);
+        }
+
+        .char-count.warning {
+            color: var(--color-rift-volatile);
+        }
+
+        /* Summary Panel */
+        .summary-panel {
+            background: var(--color-concrete);
+            border: 1px solid var(--color-rust);
+            padding: var(--space-l);
+            height: fit-content;
+            position: sticky;
+            top: var(--space-l);
+        }
+
+        .summary-header {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--space-l);
+            padding-bottom: var(--space-m);
+            border-bottom: 1px solid var(--color-rift-stable);
+        }
+
+        .summary-section {
+            margin-bottom: var(--space-l);
+        }
+
+        .summary-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-label {
+            font-size: 10px;
+            color: var(--color-dust);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-xs);
+        }
+
+        .summary-value {
+            font-size: 14px;
+            color: var(--color-bleached);
+            margin-bottom: var(--space-s);
+        }
+
+        .summary-value.highlight {
+            color: var(--color-rift-stable);
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-s);
+            margin-top: var(--space-s);
+        }
+
+        .stat-item {
+            font-size: 12px;
+        }
+
+        .stat-label {
+            color: var(--color-dust);
+            font-size: 10px;
+        }
+
+        .stat-value {
+            color: var(--color-bleached);
+            font-weight: 600;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-top: var(--space-s);
+        }
+
+        .skill-tag {
+            padding: 4px 8px;
+            background: var(--color-steel);
+            border: 1px solid var(--color-rift-stable);
+            font-size: 10px;
+            color: var(--color-rift-stable);
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--color-rust);
+            margin: var(--space-m) 0;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--space-l);
+            border-top: 1px solid var(--color-rust);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: 1px solid var(--color-ash);
+            background: linear-gradient(135deg, var(--color-steel) 0%, var(--color-concrete) 100%);
+            color: var(--color-bleached);
+            font-family: var(--font-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            border-color: var(--color-rift-stable);
+            box-shadow: 0 0 12px rgba(77, 166, 255, 0.3);
+        }
+
+        .btn-primary {
+            border-color: var(--color-rift-stable);
+            background: var(--color-rift-stable);
+            color: var(--color-void);
+            font-weight: 600;
+            font-size: 16px;
+            padding: 16px 32px;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-rift-active);
+            box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border-color: var(--color-rust);
+        }
+
+        /* Random Name Button */
+        .input-with-button {
+            display: flex;
+            gap: var(--space-s);
+        }
+
+        .input-with-button .input-field {
+            flex: 1;
+        }
+
+        .random-btn {
+            padding: 12px 16px;
+            background: var(--color-steel);
+            border: 1px solid var(--color-rust);
+            color: var(--color-smoke);
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .random-btn:hover {
+            border-color: var(--color-rift-stable);
+            color: var(--color-rift-stable);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">ANDARA'S WORLD</div>
+            
+            <div class="stepper">
+                <div class="step completed">
+                    <div class="step-indicator"></div>
+                    <div class="step-label">Origin</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step completed">
+                    <div class="step-indicator"></div>
+                    <div class="step-label">Attributes</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step completed">
+                    <div class="step-indicator"></div>
+                    <div class="step-label">Skills</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step completed">
+                    <div class="step-indicator"></div>
+                    <div class="step-label">Appearance</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step active">
+                    <div class="step-indicator">5</div>
+                    <div class="step-label">Identity</div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <h1 class="screen-title">Name Your Protagonist</h1>
+            <p class="screen-subtitle">
+                Give your character an identity. This is the last step before entering the world. Review your choices on the right before finalizing.
+            </p>
+
+            <div class="identity-layout">
+                <!-- Form -->
+                <div class="form-panel">
+                    <!-- Character Name -->
+                    <div class="form-group">
+                        <label class="form-label">Character Name</label>
+                        <p class="form-help">
+                            Choose a name that fits the post-Convergence world. Names can be traditional, adopted callsigns, or anything that tells your story.
+                        </p>
+                        <div class="input-with-button">
+                            <input 
+                                type="text" 
+                                class="input-field" 
+                                placeholder="Enter character name"
+                                maxlength="30"
+                                oninput="updateSummary('name', this.value); updateCharCount('nameCount', this.value.length, 30)"
+                                value="Kael Voss"
+                            >
+                            <button class="random-btn" onclick="randomizeName()" title="Generate random name">⚄</button>
+                        </div>
+                        <div class="char-count" id="nameCount">8 / 30</div>
+                    </div>
+
+                    <!-- Backstory -->
+                    <div class="form-group">
+                        <label class="form-label">Personal Background (Optional)</label>
+                        <p class="form-help">
+                            A brief personal history or motivation. This is for your own reference and won't be shared. What drives your protagonist into the wasteland?
+                        </p>
+                        <textarea 
+                            class="input-field textarea-field" 
+                            placeholder="Write a brief background for your character..."
+                            maxlength="500"
+                            oninput="updateCharCount('backgroundCount', this.value.length, 500)"
+                        >A former vault technician who left the safety of underground to search for their missing sibling. Skilled with pre-Convergence tech but naive to the harsh realities above ground.</textarea>
+                        <div class="char-count" id="backgroundCount">189 / 500</div>
+                    </div>
+
+                    <!-- Motivations -->
+                    <div class="form-group">
+                        <label class="form-label">Primary Motivation (Optional)</label>
+                        <p class="form-help">
+                            What pushes you forward? This helps guide your roleplay decisions.
+                        </p>
+                        <select class="input-field" onchange="updateSummary('motivation', this.value)">
+                            <option value="Survival">Survival - Stay alive, day by day</option>
+                            <option value="Reunion" selected>Reunion - Find lost loved ones</option>
+                            <option value="Revenge">Revenge - Settle old scores</option>
+                            <option value="Discovery">Discovery - Uncover the truth about the Convergence</option>
+                            <option value="Power">Power - Gain influence and control</option>
+                            <option value="Redemption">Redemption - Atone for past mistakes</option>
+                            <option value="Wanderlust">Wanderlust - Explore the changed world</option>
+                            <option value="Custom">Custom - Define your own path</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="summary-panel">
+                    <div class="summary-header">Character Summary</div>
+
+                    <div class="summary-section">
+                        <div class="summary-label">Name</div>
+                        <div class="summary-value highlight" id="summaryName">Kael Voss</div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="summary-label">Origin</div>
+                        <div class="summary-value">Vault Dweller</div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="summary-label">Attributes</div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-label">STR</div>
+                                <div class="stat-value">10</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">AGI</div>
+                                <div class="stat-value">12</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">END</div>
+                                <div class="stat-value">11</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">INT</div>
+                                <div class="stat-value">14</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">PER</div>
+                                <div class="stat-value">13</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">CHA</div>
+                                <div class="stat-value">8</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="summary-label">Skill Focuses</div>
+                        <div class="skills-list">
+                            <div class="skill-tag">Electronics</div>
+                            <div class="skill-tag">Mechanics</div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="summary-section">
+                        <div class="summary-label">Motivation</div>
+                        <div class="summary-value" id="summaryMotivation">Reunion</div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="summary-label">Appearance</div>
+                        <div class="summary-value">Masculine • Short Black Hair • Blue Eyes</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="actions">
+            <button class="btn btn-secondary" onclick="alert('Return to Appearance')">← Back</button>
+            <button class="btn btn-primary" onclick="finalizeCharacter()">Begin Your Journey →</button>
+        </footer>
+    </div>
+
+    <script>
+        function updateCharCount(elementId, current, max) {
+            const element = document.getElementById(elementId);
+            element.textContent = `${current} / ${max}`;
+            if (current > max * 0.9) {
+                element.classList.add('warning');
+            } else {
+                element.classList.remove('warning');
+            }
+        }
+
+        function updateSummary(field, value) {
+            if (field === 'name') {
+                document.getElementById('summaryName').textContent = value || 'Unnamed';
+            } else if (field === 'motivation') {
+                document.getElementById('summaryMotivation').textContent = value;
+            }
+        }
+
+        function randomizeName() {
+            const firstNames = ['Kael', 'Raven', 'Ash', 'Nova', 'Finn', 'Zara', 'Drake', 'Luna', 'Orion', 'Sage'];
+            const lastNames = ['Voss', 'Blackwood', 'Sterling', 'Frost', 'Hayes', 'Cross', 'Ryder', 'Stone', 'Quinn', 'Rivers'];
+            
+            const randomFirst = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const randomLast = lastNames[Math.floor(Math.random() * lastNames.length)];
+            const randomName = `${randomFirst} ${randomLast}`;
+            
+            const input = document.querySelector('.input-with-button .input-field');
+            input.value = randomName;
+            updateSummary('name', randomName);
+            updateCharCount('nameCount', randomName.length, 30);
+        }
+
+        function finalizeCharacter() {
+            alert('Character creation complete! Beginning game...');
+            // In real implementation, would save character data and transition to game
+        }
+
+        // Initialize char counts
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCharCount('nameCount', 8, 30);
+            updateCharCount('backgroundCount', 189, 500);
+        });
+    </script>
+</body>
+</html>

@@ -8,3 +8,4 @@ public interface ValueObject {
     // Value objects should implement equals() and hashCode() based on their values
 }
 
+
