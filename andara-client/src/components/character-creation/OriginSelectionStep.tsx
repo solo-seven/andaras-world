@@ -121,7 +121,7 @@ export const OriginSelectionStep: React.FC = () => {
 
   const selectedOrigin = useMemo(() => {
     if (!formData.origin) return null;
-    return availableOrigins.find((origin) => origin.id === formData.origin);
+    return availableOrigins.find((origin: OriginDefinition) => origin.id === formData.origin);
   }, [formData.origin, availableOrigins]);
 
   const originCards = useMemo(() => {
@@ -152,7 +152,7 @@ export const OriginSelectionStep: React.FC = () => {
         )}
 
         <div className="andara-origin-selection-step__grid">
-          {originCards.map((originCard) => (
+          {originCards.map((originCard: OriginCardData) => (
             <OriginCard
               key={originCard.id}
               origin={originCard}

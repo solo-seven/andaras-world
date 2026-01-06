@@ -1,0 +1,66 @@
+.party-panel {
+  height: 100%;
+}
+
+.party-panel__empty {
+  padding: var(--space-l, 24px);
+  text-align: center;
+  color: var(--color-dust, #7a8291);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body-m, 14px);
+}
+
+.party-panel__character-card {
+  padding: var(--space-m, 16px);
+  margin-bottom: var(--space-s, 8px);
+  border: 1px solid var(--color-rust, #3d4451);
+  background: var(--color-concrete, #1a1f28);
+  cursor: pointer;
+  transition: all var(--transition-base, 0.2s ease);
+  border-radius: var(--border-radius, 2px);
+}
+
+.party-panel__character-card:hover {
+  border-color: var(--color-rift-stable, #4da6ff);
+  background: rgba(26, 31, 40, 1);
+}
+
+.party-panel__character-card--selected {
+  border-color: var(--color-rift-stable, #4da6ff);
+  background: rgba(77, 166, 255, 0.1);
+  box-shadow: var(--glow-rift, 0 0 12px rgba(77, 166, 255, 0.3));
+}
+
+.party-panel__character-card:focus-visible {
+  outline: 2px solid var(--color-rift-stable, #4da6ff);
+  outline-offset: 2px;
+}
+
+.party-panel__character-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m, 16px);
+  margin-bottom: var(--space-m, 16px);
+}
+
+.party-panel__character-portrait {
+  width: 48px;
+  height: 48px;
+  background: var(--color-steel, #2d3542);
+  border: 1px solid var(--color-rust, #3d4451);
+  border-radius: var(--border-radius, 2px);
+  flex-shrink: 0;
+}
+
+.party-panel__character-name {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: var(--font-size-heading-m, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-bleached, #e3e8ef);
+}
+
+.party-panel__character-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s, 8px);
+}

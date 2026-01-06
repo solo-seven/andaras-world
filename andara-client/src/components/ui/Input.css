@@ -1,0 +1,66 @@
+.andara-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s, 8px);
+}
+
+.andara-input-label {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body-s, 12px);
+  color: var(--color-smoke, #9ba3b4);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.andara-input-required {
+  color: var(--color-rift-volatile, #ff6b6b);
+  margin-left: 2px;
+}
+
+.andara-input {
+  padding: 12px 16px;
+  background: var(--color-concrete, #1a1f28);
+  border: 1px solid var(--color-rust, #3d4451);
+  color: var(--color-bleached, #e3e8ef);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body-m, 14px);
+  border-radius: var(--border-radius, 2px);
+  transition: all var(--transition-base, 0.2s ease);
+  box-shadow: var(--shadow-inset, inset 0 1px 0 rgba(255, 255, 255, 0.05));
+}
+
+.andara-input::placeholder {
+  color: var(--color-dust, #7a8291);
+}
+
+.andara-input:hover:not(:disabled) {
+  border-color: var(--color-ash, #555d6d);
+}
+
+.andara-input:focus {
+  outline: none;
+  border-color: var(--color-rift-stable, #4da6ff);
+  box-shadow: var(--glow-rift, 0 0 12px rgba(77, 166, 255, 0.3)),
+              var(--shadow-inset, inset 0 1px 0 rgba(255, 255, 255, 0.05));
+}
+
+.andara-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-steel, #2d3542);
+}
+
+.andara-input--error {
+  border-color: var(--color-rift-volatile, #ff6b6b);
+}
+
+.andara-input--error:focus {
+  box-shadow: var(--glow-rift-volatile, 0 0 12px rgba(255, 107, 107, 0.3)),
+              var(--shadow-inset, inset 0 1px 0 rgba(255, 255, 255, 0.05));
+}
+
+.andara-input-error {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-caption, 10px);
+  color: var(--color-rift-volatile, #ff6b6b);
+  margin-top: -4px;
+}

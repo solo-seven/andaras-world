@@ -2,12 +2,13 @@ import React from 'react';
 import './Button.css';
 
 export interface ButtonProps {
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
   disabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
   className?: string;
+  'aria-label'?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -17,9 +18,11 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   type = 'button',
   className = '',
+  'aria-label': ariaLabel,
 }) => {
   const baseClass = 'andara-button';
-  const variantClass = `andara-button--${variant}`;
+  // Secondary variant uses base styles (no additional class needed)
+  const variantClass = variant === 'secondary' ? '' : `andara-button--${variant}`;
   const disabledClass = disabled ? 'andara-button--disabled' : '';
   const combinedClass = `${baseClass} ${variantClass} ${disabledClass} ${className}`.trim();
 
@@ -29,6 +32,8 @@ export const Button: React.FC<ButtonProps> = ({
       className={combinedClass}
       onClick={onClick}
       disabled={disabled}
+      aria-label={ariaLabel}
+      aria-disabled={disabled}
     >
       {children}
     </button>

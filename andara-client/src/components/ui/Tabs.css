@@ -1,0 +1,51 @@
+.andara-tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.andara-tabs-list {
+  display: flex;
+  gap: var(--space-xs, 4px);
+  border-bottom: 1px solid var(--color-rust, #3d4451);
+  margin-bottom: var(--space-m, 16px);
+}
+
+.andara-tab {
+  padding: var(--space-s, 8px) var(--space-m, 16px);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-smoke, #9ba3b4);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body-m, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: all var(--transition-base, 0.2s ease);
+  position: relative;
+  top: 1px;
+}
+
+.andara-tab:hover:not(.andara-tab--disabled) {
+  color: var(--color-bleached, #e3e8ef);
+  border-bottom-color: var(--color-ash, #555d6d);
+}
+
+.andara-tab--active {
+  color: var(--color-rift-stable, #4da6ff);
+  border-bottom-color: var(--color-rift-stable, #4da6ff);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.andara-tab:focus-visible {
+  outline: 2px solid var(--color-rift-stable, #4da6ff);
+  outline-offset: 2px;
+}
+
+.andara-tab--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.andara-tabs-panel {
+  flex: 1;
+}

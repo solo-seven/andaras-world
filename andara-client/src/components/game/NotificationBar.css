@@ -1,0 +1,59 @@
+.notification-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s, 8px);
+  padding: var(--space-s, 8px) var(--space-m, 16px);
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.notification-bar__item {
+  padding: var(--space-s, 8px) var(--space-m, 16px);
+  border: 1px solid;
+  border-radius: var(--border-radius, 2px);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body-s, 12px);
+  cursor: pointer;
+  transition: all var(--transition-base, 0.2s ease);
+  animation: slide-in-bottom var(--transition-base, 0.2s ease);
+  backdrop-filter: blur(8px);
+}
+
+.notification-bar__item--info {
+  background: rgba(77, 166, 255, 0.1);
+  border-color: var(--color-rift-stable, #4da6ff);
+  color: var(--color-rift-stable, #4da6ff);
+}
+
+.notification-bar__item--success {
+  background: rgba(77, 255, 184, 0.1);
+  border-color: var(--color-rift-healing, #4dffb8);
+  color: var(--color-rift-healing, #4dffb8);
+}
+
+.notification-bar__item--warning {
+  background: rgba(255, 219, 77, 0.1);
+  border-color: var(--color-rift-temporal, #ffdb4d);
+  color: var(--color-rift-temporal, #ffdb4d);
+}
+
+.notification-bar__item--error {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: var(--color-rift-volatile, #ff6b6b);
+  color: var(--color-rift-volatile, #ff6b6b);
+}
+
+.notification-bar__item:hover {
+  opacity: 0.9;
+  transform: translateX(4px);
+}
+
+.notification-bar__message {
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.notification-bar__timestamp {
+  margin-top: var(--space-xs, 4px);
+  font-size: var(--font-size-caption, 10px);
+  opacity: 0.7;
+}

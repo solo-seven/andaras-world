@@ -1,0 +1,34 @@
+.resource-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl, 32px);
+  height: 100%;
+}
+
+.resource-bar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s, 8px);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body-m, 14px);
+}
+
+.resource-bar__label {
+  color: var(--color-smoke, #9ba3b4);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.resource-bar__value {
+  color: var(--color-bleached, #e3e8ef);
+  font-weight: var(--font-weight-semibold, 600);
+  font-variant-numeric: tabular-nums;
+}
+
+.resource-bar__item--combat {
+  color: var(--color-rift-volatile, #ff6b6b);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.resource-bar__item--combat .resource-bar__label {
+  color: var(--color-rift-volatile, #ff6b6b);
+}

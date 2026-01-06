@@ -39,6 +39,36 @@
   box-shadow: 0 0 16px rgba(77, 166, 255, 0.5);
 }
 
+.andara-button--danger {
+  border-color: var(--color-rift-volatile);
+  background: linear-gradient(135deg, var(--color-steel) 0%, var(--color-concrete) 100%);
+  color: var(--color-rift-volatile);
+}
+
+.andara-button--danger:hover:not(.andara-button--disabled) {
+  border-color: var(--color-rift-volatile);
+  box-shadow: 0 0 12px rgba(255, 107, 107, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, var(--color-concrete) 100%);
+}
+
+.andara-button--ghost {
+  background: transparent;
+  border-color: var(--color-rust);
+  color: var(--color-smoke);
+}
+
+.andara-button--ghost:hover:not(.andara-button--disabled) {
+  border-color: var(--color-rift-stable);
+  color: var(--color-bleached);
+  background: rgba(77, 166, 255, 0.05);
+}
+
+.andara-button:focus-visible {
+  outline: 2px solid var(--color-rift-stable);
+  outline-offset: 2px;
+}
+
 .andara-button--disabled {
   opacity: 0.5;
   cursor: not-allowed;

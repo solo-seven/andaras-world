@@ -1,0 +1,60 @@
+.andara-progress-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s, 8px);
+}
+
+.andara-progress-bar-label {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body-s, 12px);
+  color: var(--color-smoke, #9ba3b4);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.andara-progress-bar-container {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: var(--color-concrete, #1a1f28);
+  border: 1px solid var(--color-rust, #3d4451);
+  border-radius: var(--border-radius, 2px);
+  overflow: hidden;
+}
+
+.andara-progress-bar-fill {
+  height: 100%;
+  background: var(--color-rift-stable, #4da6ff);
+  transition: width var(--transition-base, 0.2s ease);
+  box-shadow: 0 0 8px rgba(77, 166, 255, 0.5);
+}
+
+.andara-progress-bar--health .andara-progress-bar-fill {
+  background: linear-gradient(
+    90deg,
+    var(--color-health-low, #ff6b6b) 0%,
+    var(--color-health-high, #4dffb8) 100%
+  );
+}
+
+.andara-progress-bar--stamina .andara-progress-bar-fill {
+  background: var(--color-stamina, #ffdb4d);
+  box-shadow: 0 0 8px rgba(255, 219, 77, 0.5);
+}
+
+.andara-progress-bar--rift .andara-progress-bar-fill {
+  background: var(--color-rift-energy, #d946ff);
+  box-shadow: 0 0 8px rgba(217, 70, 255, 0.5);
+}
+
+.andara-progress-bar-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-caption, 10px);
+  color: var(--color-bleached, #e3e8ef);
+  font-weight: var(--font-weight-semibold, 600);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}

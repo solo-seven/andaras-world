@@ -1,0 +1,8 @@
+.action-bar {
+  position: absolute;
+  bottom: 80px;
+  right: var(--space-m, 16px);
+  display: flex;
+  gap: var(--space-s, 8px);
+  z-index: var(--z-fixed, 300);
+}

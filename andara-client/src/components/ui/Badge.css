@@ -1,0 +1,57 @@
+.andara-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-semibold, 600);
+  border-radius: var(--border-radius, 2px);
+  border: 1px solid;
+}
+
+.andara-badge--small {
+  padding: 2px 6px;
+  font-size: var(--font-size-caption, 10px);
+  line-height: 1;
+}
+
+.andara-badge--medium {
+  padding: 4px 8px;
+  font-size: var(--font-size-body-s, 12px);
+  line-height: 1.2;
+}
+
+.andara-badge--large {
+  padding: 6px 12px;
+  font-size: var(--font-size-body-m, 14px);
+  line-height: 1.4;
+}
+
+.andara-badge--default {
+  background: var(--color-steel, #2d3542);
+  border-color: var(--color-rust, #3d4451);
+  color: var(--color-bleached, #e3e8ef);
+}
+
+.andara-badge--success {
+  background: rgba(77, 255, 184, 0.1);
+  border-color: var(--color-rift-healing, #4dffb8);
+  color: var(--color-rift-healing, #4dffb8);
+}
+
+.andara-badge--warning {
+  background: rgba(255, 219, 77, 0.1);
+  border-color: var(--color-rift-temporal, #ffdb4d);
+  color: var(--color-rift-temporal, #ffdb4d);
+}
+
+.andara-badge--error {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: var(--color-rift-volatile, #ff6b6b);
+  color: var(--color-rift-volatile, #ff6b6b);
+}
+
+.andara-badge--info {
+  background: rgba(77, 166, 255, 0.1);
+  border-color: var(--color-rift-stable, #4da6ff);
+  color: var(--color-rift-stable, #4da6ff);
+}

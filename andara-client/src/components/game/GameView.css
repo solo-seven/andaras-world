@@ -1,0 +1,91 @@
+.game-view {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-void, #0a0e14);
+  overflow: hidden;
+  min-width: 1280px;
+  min-height: 720px;
+}
+
+.game-view__top-bar {
+  height: 40px;
+  border-bottom: 1px solid var(--color-rust, #3d4451);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-m, 16px);
+  background: rgba(26, 31, 40, 0.95);
+  backdrop-filter: blur(8px);
+  flex-shrink: 0;
+}
+
+.game-view__main-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.game-view__canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-view__right-sidebar {
+  width: 300px;
+  border-left: 1px solid var(--color-rust, #3d4451);
+  background: rgba(26, 31, 40, 0.95);
+  backdrop-filter: blur(8px);
+  overflow-y: auto;
+  flex-shrink: 0;
+  transition: width var(--transition-base, 0.2s ease);
+}
+
+.game-view__bottom-bar {
+  height: 60px;
+  border-top: 1px solid var(--color-rust, #3d4451);
+  background: rgba(26, 31, 40, 0.95);
+  backdrop-filter: blur(8px);
+  flex-shrink: 0;
+}
+
+.game-view__panel-toggle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 48px;
+  background: rgba(26, 31, 40, 0.95);
+  border: 1px solid var(--color-rust, #3d4451);
+  color: var(--color-rift-stable, #4da6ff);
+  font-family: var(--font-primary, 'IBM Plex Mono', monospace);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all var(--transition-base, 0.2s ease);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-view__panel-toggle--sidebar-open {
+  right: 300px;
+  border-right: none;
+}
+
+.game-view__panel-toggle--sidebar-closed {
+  right: 0;
+  border-left: none;
+}
+
+.game-view__panel-toggle:hover {
+  background: rgba(26, 31, 40, 1);
+  border-color: var(--color-rift-stable, #4da6ff);
+  box-shadow: var(--glow-rift, 0 0 12px rgba(77, 166, 255, 0.3));
+}
+
+.game-view__panel-toggle:focus-visible {
+  outline: 2px solid var(--color-rift-stable, #4da6ff);
+  outline-offset: 2px;
+}

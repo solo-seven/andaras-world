@@ -1,0 +1,57 @@
+.andara-tooltip-trigger {
+  position: relative;
+  display: inline-block;
+}
+
+.andara-tooltip {
+  position: fixed;
+  z-index: var(--z-tooltip, 700);
+  padding: 8px 12px;
+  background: rgba(26, 31, 40, 0.95);
+  border: 1px solid var(--color-rift-stable, #4da6ff);
+  color: var(--color-bleached, #e3e8ef);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body-s, 12px);
+  border-radius: var(--border-radius, 2px);
+  box-shadow: var(--glow-rift, 0 0 12px rgba(77, 166, 255, 0.3));
+  pointer-events: none;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  animation: fade-in var(--transition-fast, 0.15s) ease-in;
+}
+
+.andara-tooltip::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 4px solid transparent;
+}
+
+.andara-tooltip--top::before {
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--color-rift-stable, #4da6ff);
+}
+
+.andara-tooltip--bottom::before {
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--color-rift-stable, #4da6ff);
+}
+
+.andara-tooltip--left::before {
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--color-rift-stable, #4da6ff);
+}
+
+.andara-tooltip--right::before {
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--color-rift-stable, #4da6ff);
+}

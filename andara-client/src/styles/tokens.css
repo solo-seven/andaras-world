@@ -1,0 +1,157 @@
+/**
+ * Design Tokens - Andara's World UI Style Guide
+ * Based on the UI Style Guide document
+ */
+
+:root {
+  /* ============================================
+     COLORS - Base Palette (Muted World)
+     ============================================ */
+  --color-void: #0a0e14;
+  --color-concrete: #1a1f28;
+  --color-steel: #2d3542;
+  --color-rust: #3d4451;
+  --color-ash: #555d6d;
+  --color-dust: #7a8291;
+  --color-smoke: #9ba3b4;
+  --color-paper: #c5cdd8;
+  --color-bleached: #e3e8ef;
+
+  /* Accent Neutrals (Weathered Materials) */
+  --color-oxidized-copper: #4a5a4e;
+  --color-tarnished-brass: #5a5445;
+  --color-weathered-bronze: #4a4345;
+
+  /* ============================================
+     COLORS - Rift Energy Palette (Vibrant Accents)
+     ============================================ */
+  --color-rift-stable: #4da6ff;
+  --color-rift-resonant: #66b3ff;
+  --color-rift-active: #80c0ff;
+  --color-rift-volatile: #ff6b6b;
+  --color-rift-corrupted: #d946ff;
+  --color-rift-healing: #4dffb8;
+  --color-rift-temporal: #ffdb4d;
+
+  /* Glow Layers */
+  --glow-soft: rgba(77, 166, 255, 0.15);
+  --glow-medium: rgba(77, 166, 255, 0.30);
+  --glow-intense: rgba(77, 166, 255, 0.50);
+
+  /* ============================================
+     COLORS - Semantic Colors
+     ============================================ */
+  --color-success: #4dffb8;
+  --color-warning: #ffdb4d;
+  --color-error: #ff6b6b;
+  --color-info: #4da6ff;
+
+  /* Resource Indicators */
+  --color-health-low: #ff6b6b;
+  --color-health-high: #4dffb8;
+  --color-stamina: #ffdb4d;
+  --color-action-points: #4da6ff;
+  --color-rift-energy: #d946ff;
+  --color-ammunition: #9ba3b4;
+
+  /* Skill Category Colors */
+  --color-skill-combat: #ff6b6b;
+  --color-skill-survival: #4dffb8;
+  --color-skill-technical: #4da6ff;
+  --color-skill-arcane: #d946ff;
+  --color-skill-social: #ffdb4d;
+
+  /* ============================================
+     SPACING (8px base unit)
+     ============================================ */
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+  --space-xxxl: 64px;
+
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+  --font-primary: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+  --font-display: 'Rajdhani', 'Impact', sans-serif;
+  --font-special: 'VT323', 'Courier New', monospace;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Type Scale */
+  --font-size-display-xl: 48px;
+  --line-height-display-xl: 52px;
+  --font-size-display-l: 36px;
+  --line-height-display-l: 40px;
+  --font-size-display-m: 24px;
+  --line-height-display-m: 28px;
+  --font-size-heading-l: 20px;
+  --line-height-heading-l: 24px;
+  --font-size-heading-m: 16px;
+  --line-height-heading-m: 20px;
+  --font-size-heading-s: 14px;
+  --line-height-heading-s: 18px;
+  --font-size-body-l: 16px;
+  --line-height-body-l: 24px;
+  --font-size-body-m: 14px;
+  --line-height-body-m: 20px;
+  --font-size-body-s: 12px;
+  --line-height-body-s: 16px;
+  --font-size-caption: 10px;
+  --line-height-caption: 14px;
+  --font-size-data: 14px;
+  --line-height-data: 20px;
+
+  /* ============================================
+     EFFECTS
+     ============================================ */
+  --glow-rift: 0 0 12px rgba(77, 166, 255, 0.3);
+  --glow-rift-intense: 0 0 24px rgba(77, 166, 255, 0.5);
+  --glow-rift-volatile: 0 0 12px rgba(255, 107, 107, 0.3);
+  --shadow-panel: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+  /* ============================================
+     BORDERS & RADIUS
+     ============================================ */
+  --border-width: 1px;
+  --border-radius: 2px;
+  --border-radius-small: 1px;
+
+  /* ============================================
+     BREAKPOINTS
+     ============================================ */
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1280px;
+  --breakpoint-xl: 1920px;
+
+  /* ============================================
+     TRANSITIONS
+     ============================================ */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* ============================================
+     Z-INDEX LAYERS
+     ============================================ */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-loading: 10000;
+}

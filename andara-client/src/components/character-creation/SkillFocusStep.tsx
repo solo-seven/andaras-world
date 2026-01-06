@@ -99,7 +99,7 @@ export const SkillFocusStep: React.FC = () => {
     const current = formData.skillFocuses;
     if (current.includes(skillId)) {
       // Deselect
-      dispatch(updateFormData({ skillFocuses: current.filter((id) => id !== skillId) }));
+      dispatch(updateFormData({ skillFocuses: current.filter((id: string) => id !== skillId) }));
     } else {
       // Select (if under max)
       if (current.length < maxSelections) {
@@ -128,7 +128,7 @@ export const SkillFocusStep: React.FC = () => {
   // Group skills by category
   const skillsByCategory = useMemo(() => {
     const grouped: Record<string, typeof availableSkills> = {};
-    availableSkills.forEach((skill) => {
+    availableSkills.forEach((skill: Skill) => {
       const category = skill.category.toLowerCase();
       if (!grouped[category]) {
         grouped[category] = [];
@@ -141,14 +141,14 @@ export const SkillFocusStep: React.FC = () => {
   // Get selected skills for display (using IDs as stable identifiers)
   const selectedSkills = useMemo(() => {
     return formData.skillFocuses
-      .map((skillId) => availableSkills.find((s) => s.id === skillId))
-      .filter((skill): skill is Skill => !!skill);
+      .map((skillId: string) => availableSkills.find((s: Skill) => s.id === skillId))
+      .filter((skill: Skill | undefined): skill is Skill => !!skill);
   }, [formData.skillFocuses, availableSkills]);
 
   // Get origin bonus skills for current origin
   const originBonusSkills = useMemo(() => {
     if (!formData.origin) return [];
-    return ORIGIN_SKILL_BONUSES[formData.origin] || [];
+    return ORIGIN_SKILL_BONUSES[formData.origin as Origin] || [];
   }, [formData.origin]);
 
   return (
@@ -170,14 +170,14 @@ export const SkillFocusStep: React.FC = () => {
               {' '}
               Your {formData.origin
                 .split('_')
-                .map((w) => w.charAt(0) + w.slice(1).toLowerCase())
+                .map((w: string) => w.charAt(0) + w.slice(1).toLowerCase())
                 .join(' ')}{' '}
               origin has already granted you{' '}
               <strong>
                 {originBonusSkills
-                  .map((id) => {
+                  .map((id: string) => {
                     const skill = availableSkills.find(
-                      (s) => normalizeSkillId(s.id) === normalizeSkillId(id)
+                      (s: Skill) => normalizeSkillId(s.id) === normalizeSkillId(id)
                     );
                     return skill?.name;
                   })
@@ -201,7 +201,7 @@ export const SkillFocusStep: React.FC = () => {
             / {maxSelections} focuses selected
           </div>
           <div className="andara-skill-focus-step__selected-skills">
-            {selectedSkills.map((skill) => {
+            {selectedSkills.map((skill: Skill) => {
               const categoryColor = getCategoryColor(skill.category);
               return (
                 <div
@@ -246,7 +246,7 @@ export const SkillFocusStep: React.FC = () => {
                 </div>
               </div>
               <div className="andara-skill-focus-step__skills-grid">
-                {skills.map((skill) => {
+                {skills.map((skill: Skill) => {
                   const isSelected = formData.skillFocuses.includes(skill.id);
                   const isDisabled =
                     !isSelected && formData.skillFocuses.length >= maxSelections;

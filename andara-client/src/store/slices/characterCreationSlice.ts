@@ -6,7 +6,7 @@ import type {
   OriginDefinition,
   Skill,
 } from '../../types/character';
-import { startNewGame, retryWithBackoff } from '../../api/gameApi';
+import { startNewGame } from '../../api/gameApi';
 import { setGameIds } from './gameSlice';
 
 export type CharacterCreationStep =
@@ -76,15 +76,13 @@ export const startNewGameAsync = createAsyncThunk<
     }
 
     try {
-      const response = await retryWithBackoff(async () => {
-        return await startNewGame({
-          name: formData.name,
-          origin: formData.origin!,
-          attributes: formData.attributes!,
-          skillFocuses: formData.skillFocuses,
-          appearance: formData.appearance!,
-        });
-      }, 3, 1000);
+      const response = await startNewGame({
+        name: formData.name,
+        origin: formData.origin!,
+        attributes: formData.attributes!,
+        skillFocuses: formData.skillFocuses,
+        appearance: formData.appearance!,
+      });
 
       if (!response.success) {
         return rejectWithValue(response.error || 'Failed to create character');

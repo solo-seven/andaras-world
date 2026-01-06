@@ -1,0 +1,286 @@
+/**
+ * Visual Effects Library - Andara's World
+ * Rift energy effects, scan lines, corner brackets, pulse animations
+ */
+
+/* ============================================
+   RIFT GLOW EFFECTS
+   ============================================ */
+
+.rift-glow {
+  box-shadow: var(--glow-rift);
+  transition: box-shadow var(--transition-base);
+}
+
+.rift-glow-intense {
+  box-shadow: var(--glow-rift-intense);
+}
+
+.rift-glow-volatile {
+  box-shadow: var(--glow-rift-volatile);
+}
+
+.rift-glow-text {
+  color: var(--color-rift-stable);
+  text-shadow: 0 0 8px rgba(77, 166, 255, 0.5),
+               0 0 16px rgba(77, 166, 255, 0.25);
+}
+
+.rift-glow-border {
+  border-color: var(--color-rift-stable);
+  box-shadow: var(--glow-rift);
+}
+
+/* Hover state for interactive elements */
+.rift-glow-hover:hover {
+  box-shadow: var(--glow-rift-intense);
+  border-color: var(--color-rift-active);
+}
+
+/* ============================================
+   SCAN LINE EFFECT
+   ============================================ */
+
+.scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(77, 166, 255, 0.5) 50%,
+    transparent 100%
+  );
+  animation: scan-line-move 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes scan-line-move {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   CORNER BRACKET DECORATIONS
+   ============================================ */
+
+.corner-brackets {
+  position: relative;
+}
+
+.corner-brackets::before,
+.corner-brackets::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-rift-stable);
+  pointer-events: none;
+}
+
+.corner-brackets::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner-brackets::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* Alternative: All four corners */
+.corner-brackets-all {
+  position: relative;
+}
+
+.corner-brackets-all::before,
+.corner-brackets-all::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-rift-stable);
+  pointer-events: none;
+}
+
+.corner-brackets-all::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner-brackets-all::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* Additional corners using pseudo-elements on parent */
+.corner-brackets-all {
+  --corner-size: 12px;
+}
+
+/* ============================================
+   PULSE ANIMATIONS
+   ============================================ */
+
+.pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: var(--glow-rift);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: var(--glow-rift-intense);
+  }
+}
+
+.pulse-strong {
+  animation: pulse-strong 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-strong {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.pulse-critical {
+  animation: pulse-critical 1s ease-in-out infinite;
+  color: var(--color-rift-volatile);
+}
+
+@keyframes pulse-critical {
+  0%,
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+  }
+  50% {
+    opacity: 0.7;
+    text-shadow: 0 0 16px rgba(255, 107, 107, 0.8);
+  }
+}
+
+/* ============================================
+   SHIMMER EFFECT
+   ============================================ */
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(77, 166, 255, 0.2),
+    transparent
+  );
+  animation: shimmer-slide 2s infinite;
+}
+
+@keyframes shimmer-slide {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* ============================================
+   FADE IN ANIMATION
+   ============================================ */
+
+.fade-in {
+  animation: fade-in var(--transition-base) ease-in;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   SLIDE IN ANIMATIONS
+   ============================================ */
+
+.slide-in-bottom {
+  animation: slide-in-bottom var(--transition-base) ease-out;
+}
+
+@keyframes slide-in-bottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-top {
+  animation: slide-in-top var(--transition-base) ease-out;
+}
+
+@keyframes slide-in-top {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
