@@ -62,7 +62,7 @@ export async function exportContent(
 /**
  * Get list of content items (placeholder for future implementation).
  */
-export async function listContent(contentType: string): Promise<unknown[]> {
+export async function listContent(_contentType: string): Promise<unknown[]> {
   // TODO: Implement when list endpoint is available
   return [];
 }

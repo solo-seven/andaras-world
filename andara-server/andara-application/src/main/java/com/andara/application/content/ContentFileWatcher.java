@@ -177,7 +177,7 @@ public class ContentFileWatcher {
             if (result.isSuccess()) {
                 // Publish reload event
                 ContentReloaded event = ContentReloaded.create(
-                    contentType,
+                    contentType.name(),
                     result.getImportedIds(),
                     file.toString(),
                     null, // instanceId

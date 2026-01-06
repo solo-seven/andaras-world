@@ -23,8 +23,7 @@ public class ContentConfiguration {
         ObjectMapper objectMapper,
         ReferenceValidator.ReferenceResolver referenceResolver
     ) {
-        ReferenceValidator referenceValidator = new ReferenceValidator(objectMapper, referenceResolver);
-        return new ValidationEngine(objectMapper, referenceValidator);
+        return new ValidationEngine(objectMapper, referenceResolver);
     }
 
     /**

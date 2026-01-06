@@ -1,5 +1,12 @@
 package com.andara.content.cli;
 
+import com.andara.content.cli.commands.CreateCommand;
+import com.andara.content.cli.commands.ValidateCommand;
+import com.andara.content.cli.commands.ImportCommand;
+import com.andara.content.cli.commands.ExportCommand;
+import com.andara.content.cli.commands.ListCommand;
+import com.andara.content.cli.commands.DiffCommand;
+import com.andara.content.cli.commands.MergeCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;

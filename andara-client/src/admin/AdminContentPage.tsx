@@ -8,7 +8,7 @@ import './AdminContentPage.css';
 export const AdminContentPage: React.FC = () => {
   const [selectedContentType, setSelectedContentType] = useState<string>('ITEM_TEMPLATE');
   const [view, setView] = useState<'list' | 'detail' | 'edit' | 'import'>('list');
-  const [selectedContent, setSelectedContent] = useState<unknown>(null);
+  const [selectedContent] = useState<unknown>(null);
 
   const contentTypes = [
     'ITEM_TEMPLATE',
@@ -53,7 +53,7 @@ export const AdminContentPage: React.FC = () => {
         {view === 'list' && (
           <ContentListView contentType={selectedContentType} />
         )}
-        {view === 'detail' && selectedContent && (
+        {view === 'detail' && selectedContent !== null && (
           <ContentDetailView
             contentType={selectedContentType}
             contentId=""

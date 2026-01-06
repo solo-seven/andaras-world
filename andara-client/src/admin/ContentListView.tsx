@@ -7,7 +7,7 @@ interface ContentListViewProps {
 
 export const ContentListView: React.FC<ContentListViewProps> = ({ contentType }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [items, setItems] = useState<unknown[]>([]);
+  const [items] = useState<unknown[]>([]);
 
   return (
     <div className="content-list-view">

@@ -1,6 +1,5 @@
 package com.andara.domain.content.events;
 
-import com.andara.content.ContentType;
 import com.andara.domain.DomainEvent;
 
 import java.time.Instant;
@@ -24,14 +23,14 @@ public record ContentImported(
 ) implements DomainEvent {
 
     public static ContentImported create(
-        ContentType contentType,
+        String contentType,
         List<String> importedIds,
         String importedBy,
         UUID instanceId,
         UUID agentId
     ) {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("contentType", contentType.name());
+        payload.put("contentType", contentType);
         payload.put("importedIds", importedIds);
         payload.put("importedBy", importedBy);
         payload.put("count", importedIds.size());
@@ -44,7 +43,7 @@ public record ContentImported(
             UUID.randomUUID(),
             "ContentImported",
             Instant.now(),
-            contentType.name(),
+            contentType,
             "Content",
             1L,
             payload,

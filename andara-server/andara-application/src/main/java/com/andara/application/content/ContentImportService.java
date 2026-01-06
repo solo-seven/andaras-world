@@ -91,7 +91,7 @@ public class ContentImportService {
         // Publish event if successful
         if (errors.isEmpty() && !importedIds.isEmpty()) {
             ContentImported event = ContentImported.create(
-                contentType,
+                contentType.name(),
                 importedIds,
                 importedBy,
                 null, // instanceId - system operation

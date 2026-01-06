@@ -1,6 +1,5 @@
 package com.andara.domain.content.events;
 
-import com.andara.content.ContentType;
 import com.andara.domain.DomainEvent;
 
 import java.time.Instant;
@@ -24,14 +23,14 @@ public record ContentReloaded(
 ) implements DomainEvent {
 
     public static ContentReloaded create(
-        ContentType contentType,
+        String contentType,
         List<String> reloadedIds,
         String source,
         UUID instanceId,
         UUID agentId
     ) {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("contentType", contentType.name());
+        payload.put("contentType", contentType);
         payload.put("reloadedIds", reloadedIds);
         payload.put("source", source);
         payload.put("count", reloadedIds.size());
@@ -44,7 +43,7 @@ public record ContentReloaded(
             UUID.randomUUID(),
             "ContentReloaded",
             Instant.now(),
-            contentType.name(),
+            contentType,
             "Content",
             1L,
             payload,
@@ -92,8 +91,8 @@ public record ContentReloaded(
         return metadata;
     }
 
-    public ContentType getContentType() {
-        return ContentType.valueOf((String) payload.get("contentType"));
+    public String getContentType() {
+        return (String) payload.get("contentType");
     }
 
     @SuppressWarnings("unchecked")

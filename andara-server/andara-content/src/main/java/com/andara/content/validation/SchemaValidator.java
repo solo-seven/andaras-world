@@ -30,12 +30,8 @@ public class SchemaValidator {
         this.objectMapper = objectMapper;
         
         // Configure schema factory to resolve relative references
+        // Use default configuration - don't set empty namespace as it requires absolute URI
         LoadingConfiguration loadingCfg = LoadingConfiguration.newBuilder()
-            .setURITranslatorConfiguration(
-                URITranslatorConfiguration.newBuilder()
-                    .setNamespace("")
-                    .freeze()
-            )
             .freeze();
         
         this.schemaFactory = JsonSchemaFactory.newBuilder()
@@ -58,11 +54,9 @@ public class SchemaValidator {
             
             if (!report.isSuccess()) {
                 report.forEach(message -> {
-                    String errorMsg = String.format(
-                        "Schema validation error at %s: %s",
-                        message.getInstance().getNode().asText(),
-                        message.getMessage()
-                    );
+                    // ProcessingMessage API: getMessage() provides the error message
+                    // The message typically includes the path/pointer information
+                    String errorMsg = "Schema validation error: " + message.getMessage();
                     errors.add(errorMsg);
                     log.debug("Schema validation error: {}", errorMsg);
                 });

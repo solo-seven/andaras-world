@@ -78,7 +78,7 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ contentType }) => {
         </button>
       </div>
       
-      {result && (
+      {result !== null && (
         <div className="import-result">
           <h3>Import Result</h3>
           <pre>{JSON.stringify(result, null, 2)}</pre>

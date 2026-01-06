@@ -1,7 +1,7 @@
-.PHONY: test test-backend test-frontend build build-backend build-frontend all clean help storybook run-backend run-frontend
+.PHONY: test test-backend test-frontend type-check build build-backend build-frontend all clean help storybook run-backend run-frontend
 
 # Default target
-all: test build
+all: type-check test build
 
 # Test targets
 test: test-backend test-frontend
@@ -32,6 +32,16 @@ test-frontend:
 		fi && \
 		npm test -- --run
 	@echo "✓ Frontend tests passed"
+
+type-check:
+	@echo "Running TypeScript type check..."
+	@cd andara-client && \
+		if [ ! -d node_modules ]; then \
+			echo "Installing dependencies..."; \
+			npm install --legacy-peer-deps; \
+		fi && \
+		npx tsc --noEmit
+	@echo "✓ TypeScript type check passed"
 
 # Build targets
 build: build-backend build-frontend
@@ -89,7 +99,8 @@ run-frontend:
 # Help target
 help:
 	@echo "Available targets:"
-	@echo "  make all           - Run all tests then build all Docker images"
+	@echo "  make all           - Run type check, all tests then build all Docker images"
+	@echo "  make type-check    - Run TypeScript type checking"
 	@echo "  make test          - Run all unit tests (backend + frontend)"
 	@echo "  make test-backend  - Run backend unit tests"
 	@echo "  make test-frontend - Run frontend unit tests"

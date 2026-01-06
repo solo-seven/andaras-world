@@ -66,20 +66,21 @@ public class ValidationEngine {
         List<ValidationResult> results = new ArrayList<>();
         
         for (int i = 0; i < contents.size(); i++) {
+            final int itemIndex = i + 1; // Make effectively final for lambda
             Object content = contents.get(i);
             ValidationResult result = validate(contentType, content);
             if (!result.isValid()) {
                 // Add index context to errors, but preserve warnings
                 List<String> contextualErrors = new ArrayList<>();
-                result.getErrors().forEach(error -> 
-                    contextualErrors.add(String.format("[Item %d] %s", i + 1, error))
-                );
+                for (String error : result.getErrors()) {
+                    contextualErrors.add(String.format("[Item %d] %s", itemIndex, error));
+                }
                 // Preserve warnings even when there are errors
                 if (!result.getWarnings().isEmpty()) {
                     List<String> contextualWarnings = new ArrayList<>();
-                    result.getWarnings().forEach(warning -> 
-                        contextualWarnings.add(String.format("[Item %d] %s", i + 1, warning))
-                    );
+                    for (String warning : result.getWarnings()) {
+                        contextualWarnings.add(String.format("[Item %d] %s", itemIndex, warning));
+                    }
                     // Create a result with both errors and warnings
                     results.add(ValidationResult.failureWithWarnings(contextualErrors, contextualWarnings));
                 } else {
