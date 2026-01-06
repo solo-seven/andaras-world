@@ -1,0 +1,20 @@
+plugins {
+    id 'application'
+}
+
+application {
+    mainClass = 'com.andara.content.cli.ContentCLI'
+}
+
+dependencies {
+    implementation project(':andara-content')
+    implementation project(':andara-application')
+    
+    implementation 'info.picocli:picocli:4.7.5'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.5'
+    
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

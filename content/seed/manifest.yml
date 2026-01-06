@@ -1,0 +1,28 @@
+description: "Minimal content set for development and testing"
+version: "0.1.0"
+
+items:
+  - id: item_pipe_pistol
+    rationale: "Basic ranged weapon for combat testing"
+  - id: item_machete
+    rationale: "Basic melee weapon"
+  - id: item_leather_jacket
+    rationale: "Basic armor"
+  - id: item_stimpak
+    rationale: "Healing consumable"
+
+skills:
+  - id: skill_melee
+    rationale: "Primary combat skill"
+  - id: skill_ranged
+    rationale: "Ranged combat skill"
+  - id: skill_scavenging
+    rationale: "Resource gathering"
+
+recipes:
+  - id: recipe_stimpak
+    rationale: "Basic crafting test"
+
+regions:
+  - id: region_dev_zone
+    rationale: "Small test region with all POI types"

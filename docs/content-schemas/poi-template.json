@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "POITemplate",
+  "description": "Template for a Point of Interest (ruin, cache, settlement, etc.)",
+  "required": ["poiId", "name", "type"],
+  "properties": {
+    "poiId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this POI template"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Display name of the POI"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what this POI is"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["ruin", "cache", "settlement", "hazard", "anomaly", "landmark"],
+      "description": "Type of point of interest"
+    },
+    "interactable": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether players can interact with this POI"
+    },
+    "lootTable": {
+      "type": "array",
+      "description": "Possible items that can be found",
+      "items": {
+        "type": "object",
+        "properties": {
+          "itemTemplateId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Probability weight for random selection"
+          },
+          "quantity": {
+            "type": "object",
+            "properties": {
+              "min": { "type": "integer", "minimum": 0 },
+              "max": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "encounters": {
+      "type": "array",
+      "description": "Possible encounters at this POI",
+      "items": {
+        "type": "string",
+        "format": "uuid",
+        "description": "Reference to encounter template"
+      }
+    },
+    "requiredSkill": {
+      "type": "object",
+      "properties": {
+        "skillId": { "type": "string" },
+        "level": { "type": "integer", "minimum": 0, "maximum": 100 }
+      },
+      "description": "Skill check required to interact or access"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "author": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

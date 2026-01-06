@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "ItemTemplate",
+  "description": "Template defining properties for an item type in the game",
+  "required": ["templateId", "name", "category", "baseValue", "weight"],
+  "properties": {
+    "templateId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this item template"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Display name of the item"
+    },
+    "description": {
+      "type": "string",
+      "description": "Flavor text describing the item"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["weapon", "armor", "consumable", "resource", "artifact", "tool"],
+      "description": "Item category determining behavior and properties"
+    },
+    "baseValue": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Base credit value in the economy"
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000,
+      "description": "Weight in kilograms"
+    },
+    "stackable": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether multiple instances can stack in inventory"
+    },
+    "maxStackSize": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Maximum stack size (only relevant if stackable is true)"
+    },
+    "properties": {
+      "type": "object",
+      "description": "Category-specific properties",
+      "properties": {
+        "weapon": {
+          "type": "object",
+          "properties": {
+            "damageMin": { "type": "integer", "minimum": 0 },
+            "damageMax": { "type": "integer", "minimum": 0 },
+            "attackSpeed": { "type": "number", "minimum": 0 },
+            "range": { "type": "integer", "minimum": 0 },
+            "reliability": { "type": "number", "minimum": 0, "maximum": 100 },
+            "ammoType": { "type": "string" },
+            "specialEffects": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "armor": {
+          "type": "object",
+          "properties": {
+            "armorValue": { "type": "integer", "minimum": 0 },
+            "damageResistance": {
+              "type": "object",
+              "properties": {
+                "physical": { "type": "number", "minimum": 0, "maximum": 100 },
+                "energy": { "type": "number", "minimum": 0, "maximum": 100 },
+                "arcane": { "type": "number", "minimum": 0, "maximum": 100 }
+              }
+            },
+            "slot": {
+              "type": "string",
+              "enum": ["head", "torso", "legs", "feet", "hands"]
+            },
+            "movementPenalty": { "type": "number", "minimum": 0 }
+          }
+        },
+        "consumable": {
+          "type": "object",
+          "properties": {
+            "effects": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["heal", "buff", "debuff", "cure"]
+                  },
+                  "value": { "type": "integer" },
+                  "duration": { "type": "integer", "minimum": 0 }
+                },
+                "required": ["type", "value"]
+              }
+            }
+          }
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "purity": { "type": "number", "minimum": 0, "maximum": 100 },
+            "resourceType": {
+              "type": "string",
+              "enum": ["scrap", "component", "chemical", "organic", "techSalvage", "riftCrystal", "exoticMatter"]
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Schema version"
+        },
+        "author": {
+          "type": "string",
+          "description": "Content author"
+        },
+        "description": {
+          "type": "string",
+          "description": "Design notes or rationale"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

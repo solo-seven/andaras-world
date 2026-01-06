@@ -52,6 +52,13 @@ logging:
     root: INFO
     com.andara: DEBUG
 
+content:
+  hot-reload:
+    enabled: true
+  seed:
+    enabled: true
+    on-startup: false
+
 flyway:
   enabled: true
   locations: classpath:db/migration

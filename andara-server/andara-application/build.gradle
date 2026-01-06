@@ -2,6 +2,7 @@ dependencies {
     implementation project(':andara-domain')
     implementation project(':andara-common')
     implementation project(':andara-infrastructure')
+    implementation project(':andara-content')
     
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'

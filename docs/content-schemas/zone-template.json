@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "ZoneTemplate",
+  "description": "Template for a zone within a region",
+  "required": ["zoneId", "name"],
+  "properties": {
+    "zoneId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this zone template"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Display name of the zone"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the zone"
+    },
+    "size": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      },
+      "description": "Zone dimensions in tiles"
+    },
+    "pointsOfInterest": {
+      "type": "array",
+      "description": "POIs present in this zone",
+      "items": {
+        "type": "object",
+        "required": ["poiId"],
+        "properties": {
+          "poiId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Reference to POI template"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "integer", "minimum": 0 },
+              "y": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "hazards": {
+      "type": "array",
+      "description": "Environmental hazards in the zone",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["radiation", "toxic", "riftInstability", "structuralHazard"]
+          },
+          "severity": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "area": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "integer" },
+              "y": { "type": "integer" },
+              "radius": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "author": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

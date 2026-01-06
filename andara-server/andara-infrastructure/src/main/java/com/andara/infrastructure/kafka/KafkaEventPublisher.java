@@ -66,6 +66,7 @@ public class KafkaEventPublisher implements EventPublisher {
         // Route events to appropriate topics based on aggregate type
         return switch (event.getAggregateType()) {
             case "Character", "Party", "Instance" -> PARTY_EVENTS_TOPIC;
+            case "Content" -> "andara.events.content";
             default -> "andara.events.general";
         };
     }

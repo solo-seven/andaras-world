@@ -1,0 +1,47 @@
+.content-editor {
+  padding: 20px;
+}
+
+.content-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.content-editor-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.content-editor-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.content-editor-body {
+  background: white;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.content-editor-textarea {
+  width: 100%;
+  min-height: 500px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.content-editor-hint {
+  margin-top: 10px;
+  color: #666;
+  font-size: 12px;
+  font-style: italic;
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Recipe",
+  "description": "Crafting recipe defining inputs, outputs, and requirements",
+  "required": ["recipeId", "name", "skillRequired", "skillLevel", "inputs", "outputs"],
+  "properties": {
+    "recipeId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this recipe"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Display name of the recipe"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what this recipe creates"
+    },
+    "skillRequired": {
+      "type": "string",
+      "description": "Skill ID required to craft this recipe"
+    },
+    "skillLevel": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Minimum proficiency level required"
+    },
+    "workstation": {
+      "type": "string",
+      "enum": ["workbench", "forge", "chemistryLab", "electronicsBench", "riftAltar", "artifactForge"],
+      "description": "Required crafting station type"
+    },
+    "craftingTime": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Time in minutes to craft"
+    },
+    "inputs": {
+      "type": "array",
+      "description": "Items and quantities required as inputs",
+      "items": {
+        "type": "object",
+        "required": ["itemTemplateId", "quantity"],
+        "properties": {
+          "itemTemplateId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Reference to item template"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of items required"
+          }
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "description": "Items and quantities produced",
+      "items": {
+        "type": "object",
+        "required": ["itemTemplateId", "quantity"],
+        "properties": {
+          "itemTemplateId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Reference to item template"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of items produced"
+          },
+          "qualityScaling": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether output quality scales with skill level"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "author": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

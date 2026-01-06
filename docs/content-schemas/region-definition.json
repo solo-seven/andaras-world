@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "RegionDefinition",
+  "description": "Definition of a geographic region containing zones and POIs",
+  "required": ["regionId", "name", "zones"],
+  "properties": {
+    "regionId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this region"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Display name of the region"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the region's characteristics"
+    },
+    "environmentType": {
+      "type": "string",
+      "enum": ["wasteland", "urban", "rural", "industrial", "natural", "riftAffected"],
+      "description": "Primary environment type"
+    },
+    "difficulty": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Overall difficulty rating"
+    },
+    "zones": {
+      "type": "array",
+      "description": "Zones contained within this region",
+      "items": {
+        "type": "object",
+        "required": ["zoneId"],
+        "properties": {
+          "zoneId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Reference to zone template"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "integer" },
+              "y": { "type": "integer" }
+            }
+          },
+          "connections": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Zone IDs that this zone connects to"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "author": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

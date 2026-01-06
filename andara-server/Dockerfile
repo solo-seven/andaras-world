@@ -9,7 +9,7 @@ COPY gradlew ./
 RUN chmod +x gradlew
 
 # Create module directories and copy build.gradle files (for dependency caching)
-RUN mkdir -p andara-api andara-application andara-domain andara-infrastructure andara-query andara-common andara-server-app
+RUN mkdir -p andara-api andara-application andara-domain andara-infrastructure andara-query andara-common andara-server-app andara-content andara-content-cli
 
 COPY andara-api/build.gradle ./andara-api/
 COPY andara-application/build.gradle ./andara-application/
@@ -18,6 +18,8 @@ COPY andara-infrastructure/build.gradle ./andara-infrastructure/
 COPY andara-query/build.gradle ./andara-query/
 COPY andara-common/build.gradle ./andara-common/
 COPY andara-server-app/build.gradle ./andara-server-app/
+COPY andara-content/build.gradle ./andara-content/
+COPY andara-content-cli/build.gradle ./andara-content-cli/
 
 # Download dependencies (cached layer)
 RUN ./gradlew dependencies --no-daemon || true
@@ -30,6 +32,8 @@ COPY andara-infrastructure/src ./andara-infrastructure/src
 COPY andara-query/src ./andara-query/src
 COPY andara-common/src ./andara-common/src
 COPY andara-server-app/src ./andara-server-app/src
+COPY andara-content/src ./andara-content/src
+COPY andara-content-cli/src ./andara-content-cli/src
 
 # Build the application
 RUN ./gradlew build --no-daemon -x test

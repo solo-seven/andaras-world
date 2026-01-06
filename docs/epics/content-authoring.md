@@ -26,7 +26,7 @@ Enable game designers and developers to create, validate, and deploy game conten
 │                     CONTENT PIPELINE                          │
 │                                                               │
 │  ┌────────────┐    ┌──────────────┐    ┌──────────────┐       │
-│  │  Content   │───▶│  Validation  │───▶│  Transform   │       │
+│  │  Content   │──▶│  Validation  │──▶│  Transform   │       │
 │  │  Authoring │    │  Engine      │    │  & Package   │       │
 │  └────────────┘    └──────────────┘    └──────┬───────┘       │
 │        │                                       │              │

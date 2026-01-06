@@ -3,6 +3,7 @@ dependencies {
     implementation project(':andara-domain')
     implementation project(':andara-query')
     implementation project(':andara-common')
+    implementation project(':andara-content')
     
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'

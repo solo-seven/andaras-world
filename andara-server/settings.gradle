@@ -7,6 +7,8 @@ include 'andara-infrastructure'
 include 'andara-query'
 include 'andara-common'
 include 'andara-server-app'
+include 'andara-content'
+include 'andara-content-cli'
 
 project(':andara-api').projectDir = file('andara-api')
 project(':andara-application').projectDir = file('andara-application')
@@ -15,5 +17,7 @@ project(':andara-infrastructure').projectDir = file('andara-infrastructure')
 project(':andara-query').projectDir = file('andara-query')
 project(':andara-common').projectDir = file('andara-common')
 project(':andara-server-app').projectDir = file('andara-server-app')
+project(':andara-content').projectDir = file('andara-content')
+project(':andara-content-cli').projectDir = file('andara-content-cli')
 
 

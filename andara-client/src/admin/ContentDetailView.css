@@ -1,0 +1,26 @@
+.content-detail-view {
+  padding: 20px;
+}
+
+.content-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.content-detail-body {
+  background: white;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.content-json-viewer {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}

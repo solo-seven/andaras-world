@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "SkillDefinition",
+  "description": "Definition of a skill that characters can learn and improve",
+  "required": ["skillId", "name", "category", "description"],
+  "properties": {
+    "skillId": {
+      "type": "string",
+      "pattern": "^[a-z_]+$",
+      "description": "Unique identifier for the skill (lowercase, underscores)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Display name of the skill"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["COMBAT", "SURVIVAL", "TECHNICAL", "ARCANE"],
+      "description": "Skill category grouping"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what the skill enables"
+    },
+    "abilityUnlocks": {
+      "type": "array",
+      "description": "Abilities unlocked at specific proficiency levels",
+      "items": {
+        "type": "object",
+        "required": ["proficiency", "abilityId"],
+        "properties": {
+          "proficiency": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Proficiency level required to unlock this ability"
+          },
+          "abilityId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Reference to ability definition"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "author": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

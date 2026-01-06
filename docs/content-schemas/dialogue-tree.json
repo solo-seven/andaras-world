@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "DialogueTree",
+  "description": "Dialogue tree for NPC conversations",
+  "required": ["dialogueTreeId", "nodes"],
+  "properties": {
+    "dialogueTreeId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this dialogue tree"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name/description of this dialogue tree"
+    },
+    "rootNodeId": {
+      "type": "string",
+      "description": "ID of the root node (must exist in nodes array)"
+    },
+    "nodes": {
+      "type": "array",
+      "description": "All dialogue nodes in the tree",
+      "items": {
+        "type": "object",
+        "required": ["nodeId", "type"],
+        "properties": {
+          "nodeId": {
+            "type": "string",
+            "description": "Unique identifier for this node within the tree"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["npc", "player", "choice", "condition", "action"],
+            "description": "Type of dialogue node"
+          },
+          "text": {
+            "type": "string",
+            "description": "Dialogue text (for npc/player nodes)"
+          },
+          "choices": {
+            "type": "array",
+            "description": "Player choice options (for choice nodes)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "nextNodeId": { "type": "string" },
+                "requirements": {
+                  "type": "object",
+                  "properties": {
+                    "skill": {
+                      "type": "object",
+                      "properties": {
+                        "skillId": { "type": "string" },
+                        "level": { "type": "integer", "minimum": 0 }
+                      }
+                    },
+                    "item": {
+                      "type": "object",
+                      "properties": {
+                        "itemTemplateId": { "type": "string", "format": "uuid" },
+                        "quantity": { "type": "integer", "minimum": 1 }
+                      }
+                    }
+                  }
+                }
+              },
+              "required": ["text", "nextNodeId"]
+            }
+          },
+          "nextNodeId": {
+            "type": "string",
+            "description": "Next node to proceed to (for linear nodes)"
+          },
+          "conditions": {
+            "type": "object",
+            "description": "Conditions that must be met (for condition nodes)",
+            "properties": {
+              "factionStanding": {
+                "type": "object",
+                "properties": {
+                  "factionId": { "type": "string", "format": "uuid" },
+                  "minimum": { "type": "integer", "minimum": -100, "maximum": 100 }
+                }
+              },
+              "questState": {
+                "type": "object",
+                "properties": {
+                  "questId": { "type": "string" },
+                  "state": { "type": "string" }
+                }
+              }
+            }
+          },
+          "actions": {
+            "type": "array",
+            "description": "Actions to execute (for action nodes)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["giveItem", "takeItem", "modifyStanding", "startQuest", "completeQuest"]
+                },
+                "parameters": {
+                  "type": "object",
+                  "description": "Action-specific parameters"
+                }
+              },
+              "required": ["type"]
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "author": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}
