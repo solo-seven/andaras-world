@@ -3,6 +3,7 @@ package com.andara.application.game;
 import com.andara.application.persistence.GamePersistenceService;
 import com.andara.infrastructure.CharacterRepository;
 import com.andara.infrastructure.EventPublisher;
+import com.andara.infrastructure.party.PartyRepository;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.party.Appearance;
 import com.andara.domain.party.Attributes;
@@ -35,6 +36,9 @@ class StartNewGameCommandHandlerTest {
     private CharacterRepository characterRepository;
 
     @Mock
+    private PartyRepository partyRepository;
+
+    @Mock
     private EventPublisher eventPublisher;
 
     @Mock
@@ -47,6 +51,7 @@ class StartNewGameCommandHandlerTest {
         handler = new StartNewGameCommandHandler(
             eventStore,
             characterRepository,
+            partyRepository,
             eventPublisher,
             persistenceService
         );
@@ -77,21 +82,19 @@ class StartNewGameCommandHandlerTest {
         assertThat(response.characterId()).isNotNull();
 
         // Verify Instance was saved
-        ArgumentCaptor<String> instanceIdCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> instanceTypeCaptor = ArgumentCaptor.forClass(String.class);
+        @SuppressWarnings("unchecked")
         ArgumentCaptor<List<DomainEvent>> instanceEventsCaptor = ArgumentCaptor.forClass(List.class);
         
-        verify(eventStore, atLeastOnce()).append(
-            instanceIdCaptor.capture(),
-            instanceTypeCaptor.capture(),
-            instanceEventsCaptor.capture()
-        );
+        verify(eventStore, atLeastOnce()).append(instanceEventsCaptor.capture());
 
-        // Verify Party was saved
+        // Verify Party was saved (repository handles event publishing)
+        verify(partyRepository).save(any());
+
+        // Verify Character was saved (repository handles event publishing)
         verify(characterRepository).save(any());
 
-        // Verify events were published
-        verify(eventPublisher).publish(any(List.class));
+        // Verify Instance events were published (Party and Character events published by repositories)
+        verify(eventPublisher, atLeastOnce()).publish(any(List.class));
         
         // Verify save game was created
         verify(persistenceService).saveGame(

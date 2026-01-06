@@ -3,6 +3,9 @@ package com.andara.domain.party;
 import com.andara.domain.AggregateRoot;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.party.events.CharacterCreated;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -82,13 +85,33 @@ public class Character extends AggregateRoot {
     }
 
     /**
+     * Create an empty character for event replay.
+     */
+    public static Character empty(CharacterId characterId) {
+        Character character = new Character();
+        character.characterId = characterId;
+        character.id = characterId.toString();
+        return character;
+    }
+
+    /**
      * Reconstitute character from events.
      */
     public static Character fromEvents(List<DomainEvent> events) {
-        Character character = new Character();
-        for (DomainEvent event : events) {
-            character.when(event);
+        if (events.isEmpty()) {
+            throw new IllegalArgumentException("Cannot create character from empty event list");
         }
+        
+        // Extract character ID from first event
+        String characterIdStr = events.get(0).getAggregateId();
+        CharacterId characterId = CharacterId.from(characterIdStr);
+        Character character = empty(characterId);
+        
+        // Apply all events as historical events
+        for (DomainEvent event : events) {
+            character.applyHistoricalEvent(event);
+        }
+        
         return character;
     }
 
@@ -186,6 +209,103 @@ public class Character extends AggregateRoot {
 
     public boolean isProtagonist() {
         return isProtagonist;
+    }
+
+    @Override
+    public JsonNode toSnapshot() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode snapshot = mapper.createObjectNode();
+        snapshot.put("characterId", characterId != null ? characterId.toString() : null);
+        snapshot.put("name", name != null ? name.getValue() : null);
+        snapshot.put("origin", origin != null ? origin.name() : null);
+        snapshot.put("isProtagonist", isProtagonist);
+        snapshot.put("version", version);
+        
+        // Serialize attributes
+        if (attributes != null) {
+            ObjectNode attrsNode = mapper.createObjectNode();
+            attrsNode.put("strength", attributes.strength());
+            attrsNode.put("agility", attributes.agility());
+            attrsNode.put("endurance", attributes.endurance());
+            attrsNode.put("intellect", attributes.intellect());
+            attrsNode.put("perception", attributes.perception());
+            attrsNode.put("charisma", attributes.charisma());
+            snapshot.set("attributes", attrsNode);
+        }
+        
+        // Serialize appearance
+        if (appearance != null) {
+            ObjectNode appearanceNode = mapper.createObjectNode();
+            appearanceNode.put("gender", appearance.getGender().name());
+            appearanceNode.put("bodyType", appearance.getBodyType().name());
+            snapshot.set("appearance", appearanceNode);
+        }
+        
+        // Serialize skills
+        ObjectNode skillsNode = mapper.createObjectNode();
+        if (skills != null) {
+            skills.forEach((skillId, proficiency) -> {
+                ObjectNode profNode = mapper.createObjectNode();
+                profNode.put("level", proficiency.getLevel());
+                skillsNode.set(skillId.getValue(), profNode);
+            });
+        }
+        snapshot.set("skills", skillsNode);
+        
+        return snapshot;
+    }
+
+    @Override
+    public void fromSnapshot(JsonNode snapshot) {
+        if (snapshot.has("characterId") && !snapshot.get("characterId").isNull()) {
+            this.characterId = CharacterId.from(snapshot.get("characterId").asText());
+            this.id = characterId.toString();
+        }
+        if (snapshot.has("name") && !snapshot.get("name").isNull()) {
+            this.name = CharacterName.of(snapshot.get("name").asText());
+        }
+        if (snapshot.has("origin") && !snapshot.get("origin").isNull()) {
+            this.origin = Origin.valueOf(snapshot.get("origin").asText());
+        }
+        if (snapshot.has("isProtagonist")) {
+            this.isProtagonist = snapshot.get("isProtagonist").asBoolean();
+        }
+        if (snapshot.has("version")) {
+            this.version = snapshot.get("version").asLong();
+        }
+        
+        // Restore attributes
+        if (snapshot.has("attributes") && !snapshot.get("attributes").isNull()) {
+            JsonNode attrsNode = snapshot.get("attributes");
+            this.attributes = Attributes.create(
+                attrsNode.get("strength").asInt(),
+                attrsNode.get("agility").asInt(),
+                attrsNode.get("endurance").asInt(),
+                attrsNode.get("intellect").asInt(),
+                attrsNode.get("perception").asInt(),
+                attrsNode.get("charisma").asInt()
+            );
+        }
+        
+        // Restore appearance
+        if (snapshot.has("appearance") && !snapshot.get("appearance").isNull()) {
+            JsonNode appearanceNode = snapshot.get("appearance");
+            this.appearance = Appearance.create(
+                Appearance.Gender.valueOf(appearanceNode.get("gender").asText()),
+                Appearance.BodyType.valueOf(appearanceNode.get("bodyType").asText())
+            );
+        }
+        
+        // Restore skills
+        if (snapshot.has("skills") && !snapshot.get("skills").isNull()) {
+            JsonNode skillsNode = snapshot.get("skills");
+            this.skills = new HashMap<>();
+            skillsNode.fields().forEachRemaining(entry -> {
+                JsonNode profNode = entry.getValue();
+                Proficiency proficiency = Proficiency.of(profNode.get("level").asInt());
+                this.skills.put(SkillId.of(entry.getKey()), proficiency);
+            });
+        }
     }
 }
 

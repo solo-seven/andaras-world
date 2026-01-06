@@ -97,7 +97,16 @@ public class ContentImportService {
                 null, // instanceId - system operation
                 null  // agentId - system operation
             );
-            eventPublisher.publish(List.of(event));
+            // Publish event and await completion to ensure it's sent
+            try {
+                var future = eventPublisher.publish(List.of(event));
+                if (future != null) {
+                    future.join();
+                }
+            } catch (Exception e) {
+                log.error("Failed to publish ContentImported event", e);
+                // Continue execution - event publishing failure is logged but doesn't block import
+            }
             log.info("Published ContentImported event for {} items", importedIds.size());
         }
         

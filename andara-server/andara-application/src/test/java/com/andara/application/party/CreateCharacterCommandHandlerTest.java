@@ -2,7 +2,6 @@ package com.andara.application.party;
 
 import com.andara.common.Result;
 import com.andara.infrastructure.CharacterRepository;
-import com.andara.infrastructure.EventPublisher;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.party.Character;
 import com.andara.domain.party.Origin;
@@ -27,14 +26,11 @@ class CreateCharacterCommandHandlerTest {
     @Mock
     private CharacterRepository characterRepository;
 
-    @Mock
-    private EventPublisher eventPublisher;
-
     private CreateCharacterCommandHandler handler;
 
     @BeforeEach
     void setUp() {
-        handler = new CreateCharacterCommandHandler(characterRepository, eventPublisher);
+        handler = new CreateCharacterCommandHandler(characterRepository);
     }
 
     @Test
@@ -55,7 +51,7 @@ class CreateCharacterCommandHandlerTest {
 
         assertTrue(result.isSuccess());
         verify(characterRepository, times(1)).save(any(Character.class));
-        verify(eventPublisher, times(1)).publish(any(List.class));
+        // Note: Event publishing is handled by the repository, not the handler
     }
 
     @Test

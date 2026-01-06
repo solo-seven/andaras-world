@@ -1,5 +1,7 @@
 package com.andara.application.party;
 
+import com.andara.application.command.Command;
+import com.andara.domain.AgentId;
 import com.andara.domain.party.Origin;
 import com.andara.domain.party.Attributes;
 import com.andara.domain.party.Appearance;
@@ -20,7 +22,11 @@ public record CreateCharacterCommand(
     UUID instanceId,
     UUID partyId,
     UUID agentId
-) {
+) implements Command {
+    @Override
+    public AgentId issuedBy() {
+        return AgentId.from(agentId);
+    }
     public CreateCharacterCommand {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Character name cannot be null or blank");

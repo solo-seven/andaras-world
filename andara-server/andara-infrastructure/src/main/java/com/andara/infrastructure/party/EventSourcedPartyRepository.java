@@ -1,11 +1,10 @@
 package com.andara.infrastructure.party;
 
-import com.andara.infrastructure.CharacterRepository;
 import com.andara.domain.AggregateId;
 import com.andara.domain.AggregateType;
 import com.andara.domain.DomainEvent;
-import com.andara.domain.party.Character;
-import com.andara.domain.party.CharacterId;
+import com.andara.domain.party.Party;
+import com.andara.domain.party.PartyId;
 import com.andara.infrastructure.EventPublisher;
 import com.andara.infrastructure.eventstore.EventStore;
 import com.andara.infrastructure.repository.AbstractEventSourcedRepository;
@@ -16,16 +15,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Event-sourced repository implementation for Character aggregate.
+ * Event-sourced repository implementation for Party aggregate.
  */
 @Repository
-public class EventSourcedCharacterRepository 
-    extends AbstractEventSourcedRepository<Character, CharacterId>
-    implements CharacterRepository {
+public class EventSourcedPartyRepository 
+    extends AbstractEventSourcedRepository<Party, PartyId>
+    implements PartyRepository {
 
-    private static final AggregateType CHARACTER_TYPE = AggregateType.of("Character");
+    private static final AggregateType PARTY_TYPE = AggregateType.of("Party");
 
-    public EventSourcedCharacterRepository(
+    public EventSourcedPartyRepository(
         EventStore eventStore, 
         EventPublisher eventPublisher,
         SnapshotRepository snapshotRepository,
@@ -35,24 +34,23 @@ public class EventSourcedCharacterRepository
     }
 
     @Override
-    public void save(Character character) {
-        List<DomainEvent> events = character.getUncommittedEvents();
-        save(character, events);
+    public void save(Party party) {
+        List<DomainEvent> events = party.getUncommittedEvents();
+        save(party, events);
     }
 
     @Override
-    protected AggregateId toAggregateId(CharacterId id) {
-        return AggregateId.of(id.toString());
+    protected AggregateId toAggregateId(PartyId id) {
+        return AggregateId.of(id.value().toString());
     }
 
     @Override
     protected AggregateType getAggregateType() {
-        return CHARACTER_TYPE;
+        return PARTY_TYPE;
     }
 
     @Override
-    protected Character createEmpty(CharacterId id) {
-        return Character.empty(id);
+    protected Party createEmpty(PartyId id) {
+        return Party.empty(id);
     }
 }
-

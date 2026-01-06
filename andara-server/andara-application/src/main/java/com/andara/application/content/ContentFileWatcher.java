@@ -183,7 +183,16 @@ public class ContentFileWatcher {
                     null, // instanceId
                     null  // agentId
                 );
-                eventPublisher.publish(List.of(event));
+                // Publish event and await completion to ensure it's sent before continuing
+                try {
+                    var future = eventPublisher.publish(List.of(event));
+                    if (future != null) {
+                        future.join();
+                    }
+                } catch (Exception e) {
+                    log.error("Failed to publish ContentReloaded event", e);
+                    // Continue execution - event publishing failure is logged but doesn't block hot-reload
+                }
                 
                 log.info("Hot-reloaded content: {} from {}", contentType, file.getFileName());
             } else {

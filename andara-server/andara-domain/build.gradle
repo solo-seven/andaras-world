@@ -1,5 +1,6 @@
 dependencies {
     implementation project(':andara-common')
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 

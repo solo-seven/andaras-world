@@ -33,7 +33,7 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "com.andara.domain.events"
+        spring.json.trusted.packages: "com.andara.domain.events,com.andara.infrastructure.kafka"
 
 server:
   port: 8080
@@ -64,3 +64,6 @@ flyway:
   locations: classpath:db/migration
   baseline-on-migrate: true
 
+eventstore:
+  snapshot:
+    threshold: 100  # Create snapshot every N events

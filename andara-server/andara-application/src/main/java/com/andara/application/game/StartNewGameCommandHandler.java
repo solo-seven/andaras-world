@@ -3,6 +3,7 @@ package com.andara.application.game;
 import com.andara.application.persistence.GamePersistenceService;
 import com.andara.infrastructure.CharacterRepository;
 import com.andara.infrastructure.EventPublisher;
+import com.andara.infrastructure.party.PartyRepository;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.game.Instance;
 import com.andara.domain.game.InstanceId;
@@ -35,17 +36,20 @@ public class StartNewGameCommandHandler {
 
     private final EventStore eventStore;
     private final CharacterRepository characterRepository;
+    private final PartyRepository partyRepository;
     private final EventPublisher eventPublisher;
     private final GamePersistenceService persistenceService;
 
     public StartNewGameCommandHandler(
         EventStore eventStore,
         CharacterRepository characterRepository,
+        PartyRepository partyRepository,
         EventPublisher eventPublisher,
         GamePersistenceService persistenceService
     ) {
         this.eventStore = eventStore;
         this.characterRepository = characterRepository;
+        this.partyRepository = partyRepository;
         this.eventPublisher = eventPublisher;
         this.persistenceService = persistenceService;
     }
@@ -61,11 +65,9 @@ public class StartNewGameCommandHandler {
 
         // Create Instance aggregate
         Instance instance = Instance.create(instanceId, command.agentId(), SYSTEM_AGENT_ID);
-        saveAggregate(instance, "Instance");
-
+        
         // Create Party aggregate
         Party party = Party.create(partyId, instanceId, characterId, command.agentId());
-        saveAggregate(party, "Party");
 
         // Create Character aggregate
         List<SkillId> skillFocusIds = command.skillFocuses().stream()
@@ -84,16 +86,30 @@ public class StartNewGameCommandHandler {
             partyId.value(),
             command.agentId()
         );
+
+        // Collect Instance events BEFORE saving (saveAggregate calls markCommitted which clears events)
+        // Note: Party and Character events will be published by their respective repositories
+        List<DomainEvent> instanceEvents = new ArrayList<>(instance.getUncommittedEvents());
+
+        // Save all aggregates to event store
+        saveAggregate(instance, "Instance");
+        // Party and Character repositories save AND publish events automatically
+        partyRepository.save(party);
         characterRepository.save(character);
 
-        // Collect all events for publishing
-        List<DomainEvent> allEvents = new ArrayList<>();
-        allEvents.addAll(instance.getUncommittedEvents());
-        allEvents.addAll(party.getUncommittedEvents());
-        allEvents.addAll(character.getUncommittedEvents());
-
-        // Publish events to Kafka
-        eventPublisher.publish(allEvents);
+        // Publish Instance events to Kafka (Party and Character events already published by repositories)
+        if (!instanceEvents.isEmpty()) {
+            try {
+                var future = eventPublisher.publish(instanceEvents);
+                if (future != null) {
+                    future.join();
+                }
+            } catch (Exception e) {
+                log.error("Failed to publish Instance events to Kafka", e);
+                // Don't fail the entire operation - events are already persisted
+                // In future, consider transactional outbox pattern for guaranteed delivery
+            }
+        }
 
         // Create save game record after events are committed
         try {
@@ -122,7 +138,7 @@ public class StartNewGameCommandHandler {
     private void saveAggregate(com.andara.domain.AggregateRoot aggregate, String aggregateType) {
         List<DomainEvent> events = aggregate.getUncommittedEvents();
         if (!events.isEmpty()) {
-            eventStore.append(aggregate.getId(), aggregateType, events);
+            eventStore.append(events);
             aggregate.markCommitted();
         }
     }

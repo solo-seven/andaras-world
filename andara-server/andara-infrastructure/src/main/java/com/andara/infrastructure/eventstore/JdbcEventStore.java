@@ -1,8 +1,14 @@
 package com.andara.infrastructure.eventstore;
 
+import com.andara.domain.AggregateId;
+import com.andara.domain.AggregateType;
+import com.andara.domain.ConcurrencyException;
 import com.andara.domain.DomainEvent;
+import com.andara.domain.game.InstanceId;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +21,7 @@ import java.util.*;
 
 /**
  * JDBC implementation of event store.
+ * Stores events in PostgreSQL with optimistic locking via unique constraint.
  */
 @Component
 public class JdbcEventStore implements EventStore {
@@ -29,13 +36,34 @@ public class JdbcEventStore implements EventStore {
 
     @Override
     @Transactional
-    public void append(String aggregateId, String aggregateType, List<DomainEvent> events) {
+    public void append(List<DomainEvent> events) {
+        if (events.isEmpty()) {
+            return;
+        }
+
+        // Group events by aggregate to calculate sequence numbers correctly
+        Map<String, Map<String, Long>> sequenceNumbers = new HashMap<>();
+        
         for (DomainEvent event : events) {
-            long sequenceNumber = getNextSequenceNumber(aggregateId, aggregateType);
+            String aggregateId = event.getAggregateId();
+            String aggregateType = event.getAggregateType();
+            
+            // Get or calculate next sequence number for this aggregate
+            sequenceNumbers.computeIfAbsent(aggregateId, id -> new HashMap<>())
+                .computeIfAbsent(aggregateType, type -> getNextSequenceNumber(aggregateId, aggregateType));
+            
+            long sequenceNumber = sequenceNumbers.get(aggregateId).get(aggregateType);
             
             try {
                 String payloadJson = objectMapper.writeValueAsString(event.getPayload());
                 String metadataJson = objectMapper.writeValueAsString(event.getMetadata());
+                
+                // Extract instanceId and agentId from metadata
+                // Handle "system" string for system operations (content events)
+                String instanceIdStr = event.getMetadata().get("instanceId");
+                String agentIdStr = event.getMetadata().get("agentId");
+                UUID instanceId = parseUuidOrNull(instanceIdStr);
+                UUID agentId = parseUuidOrNull(agentIdStr);
                 
                 jdbcTemplate.update(
                     """
@@ -49,43 +77,106 @@ public class JdbcEventStore implements EventStore {
                     event.getEventType(),
                     aggregateId,
                     aggregateType,
-                    UUID.fromString(event.getMetadata().get("instanceId")),
-                    UUID.fromString(event.getMetadata().get("agentId")),
+                    instanceId,
+                    agentId,
                     sequenceNumber,
                     Timestamp.from(event.getTimestamp()),
                     payloadJson,
                     metadataJson
                 );
+                
+                // Increment sequence number for next event in same aggregate
+                sequenceNumbers.get(aggregateId).put(aggregateType, sequenceNumber + 1);
+            } catch (DataIntegrityViolationException e) {
+                // Unique constraint violation indicates concurrency conflict
+                throw new ConcurrencyException(
+                    String.format("Concurrency conflict: event with sequence %d already exists for aggregate %s/%s",
+                        sequenceNumber, aggregateType, aggregateId),
+                    e
+                );
             } catch (JsonProcessingException e) {
                 throw new RuntimeException("Failed to serialize event", e);
+            } catch (Exception e) {
+                if (e instanceof ConcurrencyException) {
+                    throw e;
+                }
+                throw new RuntimeException("Failed to append event", e);
             }
         }
     }
 
     @Override
-    public List<DomainEvent> getEvents(String aggregateId, String aggregateType) {
+    public List<DomainEvent> getEvents(AggregateId id, AggregateType type) {
+        return getEvents(id, type, 0L);
+    }
+
+    @Override
+    public List<DomainEvent> getEvents(AggregateId id, AggregateType type, long fromSequence) {
         return jdbcTemplate.query(
             """
             SELECT event_id, event_type, aggregate_id, aggregate_type,
                    instance_id, agent_id, sequence_number, timestamp,
                    payload, metadata
             FROM domain_events
-            WHERE aggregate_id = ? AND aggregate_type = ?
+            WHERE aggregate_id = ? AND aggregate_type = ? AND sequence_number > ?
             ORDER BY sequence_number
             """,
             this::mapRowToEvent,
-            aggregateId,
-            aggregateType
+            id.getValue(),
+            type.getValue(),
+            fromSequence
         );
     }
 
     @Override
-    public boolean hasEvents(String aggregateId, String aggregateType) {
+    public Optional<UUID> getLatestEventId(InstanceId instanceId) {
+        try {
+            UUID result = jdbcTemplate.queryForObject(
+                """
+                SELECT event_id
+                FROM domain_events
+                WHERE instance_id = ?
+                ORDER BY timestamp DESC, sequence_number DESC
+                LIMIT 1
+                """,
+                UUID.class,
+                instanceId.value()
+            );
+            return Optional.ofNullable(result);
+        } catch (EmptyResultDataAccessException e) {
+            // No events found for this instance
+            return Optional.empty();
+        }
+    }
+    
+    /**
+     * Parse a UUID from a string, handling "system" and null values.
+     * Returns null if the string is "system" or cannot be parsed as a UUID.
+     * 
+     * @param uuidString String to parse
+     * @return UUID or null if "system" or invalid
+     */
+    private UUID parseUuidOrNull(String uuidString) {
+        if (uuidString == null || uuidString.equals("system")) {
+            // Use a well-known system UUID for system operations
+            // This allows system events to be stored while maintaining referential integrity
+            return UUID.fromString("00000000-0000-0000-0000-000000000000");
+        }
+        try {
+            return UUID.fromString(uuidString);
+        } catch (IllegalArgumentException e) {
+            // If it's not a valid UUID and not "system", use the system UUID as fallback
+            return UUID.fromString("00000000-0000-0000-0000-000000000000");
+        }
+    }
+
+    @Override
+    public boolean hasEvents(AggregateId id, AggregateType type) {
         Integer count = jdbcTemplate.queryForObject(
             "SELECT COUNT(*) FROM domain_events WHERE aggregate_id = ? AND aggregate_type = ?",
             Integer.class,
-            aggregateId,
-            aggregateType
+            id.getValue(),
+            type.getValue()
         );
         return count != null && count > 0;
     }

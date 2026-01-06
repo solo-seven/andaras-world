@@ -1,8 +1,9 @@
 package com.andara.application.party;
 
+import com.andara.application.command.CommandHandler;
+import com.andara.application.command.CommandHandlerAnnotation;
 import com.andara.common.Result;
 import com.andara.infrastructure.CharacterRepository;
-import com.andara.infrastructure.EventPublisher;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.party.Character;
 import com.andara.domain.party.CharacterId;
@@ -17,17 +18,13 @@ import java.util.stream.Collectors;
  * Command handler for creating characters.
  */
 @Component
-public class CreateCharacterCommandHandler {
+@CommandHandlerAnnotation
+public class CreateCharacterCommandHandler implements CommandHandler<CreateCharacterCommand> {
 
     private final CharacterRepository characterRepository;
-    private final EventPublisher eventPublisher;
 
-    public CreateCharacterCommandHandler(
-        CharacterRepository characterRepository,
-        EventPublisher eventPublisher
-    ) {
+    public CreateCharacterCommandHandler(CharacterRepository characterRepository) {
         this.characterRepository = characterRepository;
-        this.eventPublisher = eventPublisher;
     }
 
     public Result<List<DomainEvent>> handle(CreateCharacterCommand command) {
@@ -56,16 +53,13 @@ public class CreateCharacterCommandHandler {
                 command.agentId()
             );
 
-            // Save character
+            // Collect events before saving (repository will mark as committed)
+            List<DomainEvent> events = character.getUncommittedEvents();
+
+            // Save character (repository handles event persistence AND publishing)
             characterRepository.save(character);
 
-            // Get uncommitted events
-            List<DomainEvent> events = character.getUncommittedEvents();
-            character.markCommitted();
-
-            // Publish events
-            eventPublisher.publish(events);
-
+            // Return events that were saved and published
             return Result.success(events);
         } catch (IllegalArgumentException e) {
             return Result.failure(e.getMessage());

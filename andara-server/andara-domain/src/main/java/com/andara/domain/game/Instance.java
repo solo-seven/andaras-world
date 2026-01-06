@@ -3,6 +3,9 @@ package com.andara.domain.game;
 import com.andara.domain.AggregateRoot;
 import com.andara.domain.DomainEvent;
 import com.andara.domain.game.events.InstanceCreated;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,13 +45,33 @@ public class Instance extends AggregateRoot {
     }
 
     /**
+     * Create an empty instance for event replay.
+     */
+    public static Instance empty(InstanceId instanceId) {
+        Instance instance = new Instance();
+        instance.instanceId = instanceId;
+        instance.id = instanceId.toString();
+        return instance;
+    }
+
+    /**
      * Reconstitute instance from events.
      */
     public static Instance fromEvents(List<DomainEvent> events) {
-        Instance instance = new Instance();
-        for (DomainEvent event : events) {
-            instance.when(event);
+        if (events.isEmpty()) {
+            throw new IllegalArgumentException("Cannot create instance from empty event list");
         }
+        
+        // Extract instance ID from first event
+        String instanceIdStr = events.get(0).getAggregateId();
+        InstanceId instanceId = InstanceId.from(instanceIdStr);
+        Instance instance = empty(instanceId);
+        
+        // Apply all events as historical events
+        for (DomainEvent event : events) {
+            instance.applyHistoricalEvent(event);
+        }
+        
         return instance;
     }
 
@@ -71,5 +94,29 @@ public class Instance extends AggregateRoot {
 
     public UUID getOwnerAgentId() {
         return ownerAgentId;
+    }
+
+    @Override
+    public JsonNode toSnapshot() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode snapshot = mapper.createObjectNode();
+        snapshot.put("instanceId", instanceId != null ? instanceId.value().toString() : null);
+        snapshot.put("ownerAgentId", ownerAgentId != null ? ownerAgentId.toString() : null);
+        snapshot.put("version", version);
+        return snapshot;
+    }
+
+    @Override
+    public void fromSnapshot(JsonNode snapshot) {
+        if (snapshot.has("instanceId") && !snapshot.get("instanceId").isNull()) {
+            this.instanceId = InstanceId.from(snapshot.get("instanceId").asText());
+            this.id = instanceId.toString();
+        }
+        if (snapshot.has("ownerAgentId") && !snapshot.get("ownerAgentId").isNull()) {
+            this.ownerAgentId = UUID.fromString(snapshot.get("ownerAgentId").asText());
+        }
+        if (snapshot.has("version")) {
+            this.version = snapshot.get("version").asLong();
+        }
     }
 }
