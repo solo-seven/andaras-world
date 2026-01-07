@@ -56,10 +56,10 @@ Enable game designers and developers to create, validate, and deploy game conten
 **So that** authoring tools can validate content and prevent errors
 
 **Acceptance Criteria:**
-- [ ] JSON Schema definitions for all content types (items, skills, recipes, regions, NPCs, encounters)
-- [ ] Schema includes validation rules (ranges, required fields, foreign key references)
-- [ ] Schema supports metadata (description, version, author)
-- [ ] Schema documents available in `/docs/content-schemas/`
+- [x] JSON Schema definitions for all content types (items, skills, recipes, regions, NPCs, encounters)
+- [x] Schema includes validation rules (ranges, required fields, foreign key references)
+- [x] Schema supports metadata (description, version, author)
+- [x] Schema documents available in `/docs/content-schemas/`
 
 **Content Types to Define:**
 1. Item Templates
@@ -124,6 +124,7 @@ Enable game designers and developers to create, validate, and deploy game conten
 ```
 
 **Effort**: 3 story points
+**Status**: ✅ **COMPLETE** (PR #7, commit dee76e4)
 
 ---
 
