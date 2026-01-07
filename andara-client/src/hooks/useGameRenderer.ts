@@ -10,7 +10,9 @@ interface UseGameRendererOptions {
 }
 
 export const useGameRenderer = (options: UseGameRendererOptions = {}) => {
-  const { canvasElement } = options;
+  // canvasElement is reserved for future use (e.g., input handling)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { canvasElement: _canvasElement } = options;
   const rendererRef = useRef<WorldRenderer | null>(null);
   const cameraRef = useRef<Camera | null>(null);
   const tileRendererRef = useRef<TileRenderer | null>(null);
@@ -42,10 +44,24 @@ export const useGameRenderer = (options: UseGameRendererOptions = {}) => {
   }, []);
 
   // Update party position when it changes
+  // Note: party.position contains regionId/zoneId, not pixel/grid coordinates
+  // For now, we skip position updates until coordinate data is available
+  // This will be implemented when party movement/position tracking is added
   useEffect(() => {
     if (!rendererRef.current || !party.position) return;
 
-    rendererRef.current.updatePartyPosition(party.position);
+    // Check if position has coordinate data (gridX/gridY or x/y)
+    // If it only has regionId/zoneId, skip the update
+    const position = party.position as any;
+    const hasGridCoordinates = 'gridX' in position && 'gridY' in position && typeof position.gridX === 'number' && typeof position.gridY === 'number';
+    const hasPixelCoordinates = 'x' in position && 'y' in position && typeof position.x === 'number' && typeof position.y === 'number';
+
+    if (hasGridCoordinates) {
+      rendererRef.current.updatePartyPosition({ gridX: position.gridX, gridY: position.gridY });
+    } else if (hasPixelCoordinates) {
+      rendererRef.current.updatePartyPosition({ x: position.x, y: position.y });
+    }
+    // If position only has regionId/zoneId, skip the update
   }, [party.position]);
 
   // Update zone tiles when zone changes
